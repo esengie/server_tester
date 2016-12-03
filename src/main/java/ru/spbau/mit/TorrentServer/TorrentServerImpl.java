@@ -85,42 +85,29 @@ public class TorrentServerImpl implements TorrentServer {
     }
 
     @Override
-    public void start(File saveDir) throws TorrentIOException {
+    public void start(File saveDir) throws IOException {
         if (serverState != ServiceState.PREINIT)
             return;
 
-        try {
             protocol = new ServerProtocolImpl(saveDir);
-        } catch (IOException e) {
-            throw new TorrentIOException("Couldn't load the state of the server", e);
-        }
         openServerSocket();
         serverThread.start();
         garbageCollectorThread.start();
         serverState = ServiceState.RUNNING;
     }
 
-    public synchronized void stop() throws TorrentIOException {
+    public synchronized void stop() throws IOException {
         if (isStopped())
             return;
 
         serverState = ServiceState.STOPPED;
-        try {
             serverSocket.close();
             garbageCollectorThread.interrupt();
             protocol.saveState();
-        } catch (IOException e) {
-            throw new TorrentIOException("Error closing server", e);
-        }
     }
 
-    private void openServerSocket() throws TorrentIOException {
-        try {
+    private void openServerSocket() throws IOException {
             serverSocket = new ServerSocket(TorrentServerImpl.PORT_NUMBER);
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Cannot open port 8081", e);
-            throw new TorrentIOException("Cannot open port 8081", e);
-        }
     }
 
     private static Timestamp getNow() {

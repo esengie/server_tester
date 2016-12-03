@@ -13,14 +13,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.ParseException;
-import ru.spbau.mit.CLIApps.ClientLaunchArgs;
 import ru.spbau.mit.Protocol.RemoteFile;
 import ru.spbau.mit.TorrentClient.TorrentClient;
-import ru.spbau.mit.TorrentClient.TorrentClientImpl;
-import ru.spbau.mit.TorrentClient.TorrentFile.FileManager;
-import ru.spbau.mit.TorrentClient.TorrentFile.TorrentFileLocal;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +31,6 @@ import java.util.stream.Collectors;
 
 public class ClientAppG extends Application {
     private static final Logger logger = Logger.getLogger(ClientAppG.class.getName());
-    private static FileManager fileManager;
     private static TorrentClient client;
     private static Thread lister;
 
@@ -53,24 +46,8 @@ public class ClientAppG extends Application {
     private List<RemoteFile> remoteLst;
     private Stage stage;
 
-    public static void main(String[] args2) {
-        String args[] = {"-port", "8902", "-stateDir", ".", "-tracker", "localhost"};
-        try {
-            CommandLine cmd = ClientLaunchArgs.parseArgs(args);
-
-            Short port = Short.parseShort(cmd.getOptionValue(ClientLaunchArgs.PORT_ARG_NAME));
-
-            fileManager = new FileManager(new File(
-                    cmd.getOptionValue(ClientLaunchArgs.STATE_DIR_ARG_NAME)));
-            client = new TorrentClientImpl(fileManager, port);
-            client.connect(cmd.getOptionValue(ClientLaunchArgs.TRACKER_ADDR_ARG_NAME));
-            launch(args);
-        } catch (ParseException e) {
-            System.out.println(e.getMessage());
-            ClientLaunchArgs.launchUsage();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void main(String[] args) {
+        launch(args);
     }
 
     @Override
@@ -93,21 +70,11 @@ public class ClientAppG extends Application {
         setupUploadButton();
         List<RemoteFile> remotes = populateServersList();
 
-        Set<Integer> ids = new HashSet<>(fileManager.getFileIds());
+        Set<Integer> ids = new HashSet<>();
 
         remotes = remotes.stream()
                 .filter(s -> ids.contains(s.id))
                 .collect(Collectors.toList());
-
-        for (RemoteFile rf : remotes) {
-            try {
-                addToDownloadingList(rf, fileManager.getTorrentFile(rf.id));
-            } catch (IOException e) {
-                showException(e);
-                logger.log(Level.SEVERE, e.toString());
-                break;
-            }
-        }
 
         lister = new Thread(new Lister());
         lister.start();
@@ -142,37 +109,12 @@ public class ClientAppG extends Application {
     private void upload(File f) {
         try {
             RemoteFile remoteFile = client.executeUpload(f);
-            addToDownloadingList(remoteFile, fileManager.getTorrentFile(remoteFile.id));
         } catch (IOException e) {
             showException(e);
         }
     }
 
     private void getFile(RemoteFile remote, File dir) {
-        try {
-            TorrentFileLocal tf = fileManager.getTorrentFile(remote.id);
-            if (tf == null) {
-                addToDownloadingList(remote, client.executeGet(dir, remote));
-            }
-            if (tf != null && tf.getParts().size() != tf.totalParts()) {
-                client.executeGet(dir, remote);
-            }
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.toString());
-            showException(e);
-        }
-    }
-
-    private void addToDownloadingList(RemoteFile remote, TorrentFileLocal file) throws IOException {
-        TextField field = new TextField(format(remote));
-        field.setEditable(false);
-        HBox.setHgrow(field, Priority.ALWAYS);
-
-        ProgressBar pb = new ProgressBar(file.percent());
-        file.addObserver(new ProgressObserver(pb));
-
-        HBox hb = new HBox(field, pb);
-        downloading.getChildren().add(hb);
     }
 
     private static String format(RemoteFile remote) {
@@ -201,7 +143,6 @@ public class ClientAppG extends Application {
         lister.interrupt();
         lister.join();
         client.disconnect();
-        fileManager.saveToDisk();
         super.stop();
     }
 

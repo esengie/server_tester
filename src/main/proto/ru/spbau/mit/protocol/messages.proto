@@ -1,0 +1,8 @@
+package ru.spbau.mit.protocol;
+
+option java_outer_classname="Messages";
+
+message ArrayMessage {
+    required uint32 length = 1;
+    repeated sint64 elem = 2;
+}

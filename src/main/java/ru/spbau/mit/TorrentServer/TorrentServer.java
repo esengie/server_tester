@@ -12,7 +12,7 @@ import java.io.IOException;
 public interface TorrentServer {
     void start(File saveDir) throws IOException;
 
-    void stop() throws TorrentIOException;
+    void stop() throws IOException;
 
     boolean isStopped();
 }
