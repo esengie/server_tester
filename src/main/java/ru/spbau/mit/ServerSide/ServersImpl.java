@@ -1,6 +1,6 @@
 package ru.spbau.mit.ServerSide;
 
-import ru.spbau.mit.Protocol.ServiceState;
+import ru.spbau.mit.Protocol.ProtocolConstants;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -52,7 +52,7 @@ public class ServersImpl extends Servers {
     }
 
     private void openServerSocket() throws IOException {
-        serverSocket = new ServerSocket(ServersImpl.PORT_NUMBER);
+        serverSocket = new ServerSocket(ProtocolConstants.SERVER_PORT);
     }
 
     private static Timestamp getNow() {
@@ -61,7 +61,7 @@ public class ServersImpl extends Servers {
 
     private static boolean checkElapsed(Timestamp time) {
         long diff = getNow().getTime() - time.getTime();
-        return diff > ProtocolConstants.SERVER_TIMEOUT_MILLIS;
+        return diff > 1;
     }
 
     private class WorkerRunnable implements Runnable {
@@ -72,22 +72,21 @@ public class ServersImpl extends Servers {
         private DataOutputStream netOut;
         private DataInputStream netIn;
 
-        WorkerRunnable(Socket clientSocket, Timestamp time) {
+        WorkerRunnable(Socket clientSocket) {
             this.clientSocket = clientSocket;
-            this.time = time;
         }
 
         public void run() {
             try {
                 netOut = new DataOutputStream(clientSocket.getOutputStream());
                 netIn = new DataInputStream(clientSocket.getInputStream());
-                int port = protocol.formResponse(netIn, netOut, clientSocket.getInetAddress());
+//                int port = protocol.formResponse(netIn, netOut, clientSocket.getInetAddress());
                 netIn.close();
-                if (port > 0) {
-                    timeToLive.put(
-                            new InetSocketAddress(clientSocket.getInetAddress(), port),
-                            time);
-                }
+//                if (port > 0) {
+//                    timeToLive.put(
+//                            new InetSocketAddress(clientSocket.getInetAddress(), port),
+//                            time);
+//                }
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Clients handler error", e);
             }

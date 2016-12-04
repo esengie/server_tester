@@ -41,7 +41,6 @@ public class ClientAppG extends Application {
     @FXML
     private VBox downloading;
 
-    private List<RemoteFile> remoteLst;
     private Stage stage;
 
     public static void main(String[] args) {
@@ -66,75 +65,39 @@ public class ClientAppG extends Application {
     @FXML
     private void initialize() {
         setupUploadButton();
-        List<RemoteFile> remotes = populateServersList();
 
         Set<Integer> ids = new HashSet<>();
-
-        remotes = remotes.stream()
-                .filter(s -> ids.contains(s.id))
-                .collect(Collectors.toList());
 
         lister = new Thread(new Lister());
         lister.start();
     }
 
-    private List<RemoteFile> populateServersList() {
-        try {
-            remoteLst = client.executeList();
-            serverFiles.getChildren().clear();
-            for (int i = 0; i < remoteLst.size(); ++i) {
-                serverFiles.getChildren()
-                        .add(createServerTextField(i, format(remoteLst.get(i))));
-            }
-            return remoteLst;
-        } catch (IOException e) {
-            logger.log(Level.WARNING, e.toString());
-            showException(e);
-        }
-        return new ArrayList<>();
-    }
+//    private List<RemoteFile> populateServersList() {
+//        try {
+//            remoteLst = client.executeList();
+//            serverFiles.getChildren().clear();
+//            for (int i = 0; i < remoteLst.size(); ++i) {
+//                serverFiles.getChildren()
+//                        .add(createServerTextField(i, format(remoteLst.get(i))));
+//            }
+//            return remoteLst;
+//        } catch (IOException e) {
+//            logger.log(Level.WARNING, e.toString());
+//            showException(e);
+//        }
+//        return new ArrayList<>();
+//    }
 
     private void setupUploadButton() {
         FileChooser fileChooser = new FileChooser();
         uploadBtn.setOnMouseClicked(mouseEvent -> {
             File file = fileChooser.showOpenDialog(stage);
             if (file != null) {
-                upload(file);
+//                upload(file);
             }
         });
     }
 
-    private void upload(File f) {
-        try {
-            RemoteFile remoteFile = client.executeUpload(f);
-        } catch (IOException e) {
-            showException(e);
-        }
-    }
-
-    private void getFile(RemoteFile remote, File dir) {
-    }
-
-    private static String format(RemoteFile remote) {
-        return MessageFormat.format("{0}: {1}", remote.id, remote.name);
-    }
-
-    private TextField createServerTextField(int i, String text) {
-        TextField tf = new TextField();
-        tf.setText(text);
-        tf.setEditable(false);
-
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        tf.setOnMouseClicked(actionEvent -> {
-            File dir = directoryChooser.showDialog(stage);
-            if (dir != null) {
-                RemoteFile rf = remoteLst.get(i);
-                getFile(rf, dir);
-            }
-        });
-
-        return tf;
-    }
 
     @Override
     public void stop() throws Exception {
@@ -150,7 +113,7 @@ public class ClientAppG extends Application {
             try {
                 while (!Thread.interrupted()) {
                     Thread.sleep(1000);
-                    Platform.runLater(ClientAppG.this::populateServersList);
+//                    Platform.runLater(ClientAppG.this::populateServersList);
                 }
             } catch (InterruptedException ignored) {
             }

@@ -6,7 +6,7 @@ import java.util.List;
 import static ru.spbau.mit.Protocol.ClientSide.SyncTcpClientProtocol.formProtoMessage;
 import static ru.spbau.mit.Protocol.ClientSide.SyncTcpClientProtocol.readProtoMessage;
 
-public class SyncServerProtocol implements ServerProtocol {
+public class SyncTcpServerProtocol implements ServerProtocol {
 
     @Override
     public List<Integer> readRequest(DataInputStream input) throws IOException {
