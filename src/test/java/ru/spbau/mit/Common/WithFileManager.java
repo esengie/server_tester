@@ -1,10 +1,8 @@
 package ru.spbau.mit.Common;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.rules.TemporaryFolder;
-import ru.spbau.mit.Protocol.RemoteFile;
-import ru.spbau.mit.TorrentClient.TorrentFile.FileManager;
+import ru.spbau.mit.ClientSide.TorrentFile.FileManager;
 
 import java.io.File;
 

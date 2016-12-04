@@ -7,14 +7,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ru.spbau.mit.Protocol.RemoteFile;
-import ru.spbau.mit.TorrentClient.TorrentClient;
+import ru.spbau.mit.ClientSide.Clients;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class ClientAppG extends Application {
     private static final Logger logger = Logger.getLogger(ClientAppG.class.getName());
-    private static TorrentClient client;
+    private static Clients client;
     private static Thread lister;
 
     @FXML

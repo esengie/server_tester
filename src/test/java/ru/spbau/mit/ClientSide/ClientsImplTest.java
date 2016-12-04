@@ -1,6 +1,5 @@
-package ru.spbau.mit.TorrentClient;
+package ru.spbau.mit.ClientSide;
 
-import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -8,9 +7,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import ru.spbau.mit.Common.WithFileManager;
-import ru.spbau.mit.TorrentClient.TorrentFile.FileManager;
-import ru.spbau.mit.TorrentServer.TorrentServer;
-import ru.spbau.mit.TorrentServer.TorrentServerImpl;
+import ru.spbau.mit.ClientSide.TorrentFile.FileManager;
+import ru.spbau.mit.ServerSide.Servers;
+import ru.spbau.mit.ServerSide.ServersImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,18 +20,18 @@ import static junit.framework.TestCase.assertTrue;
 /**
  * Interaction test
  */
-public class TorrentClientImplTest {
+public class ClientsImplTest {
     private FileManager fm1;
     private FileManager fm2;
-    private TorrentClient cl1;
-    private TorrentClient cl2;
+    private Clients cl1;
+    private Clients cl2;
     private final short port1 = 8001;
     private final short port2 = 8002;
 
     private final File res1 = new File("res");
     private final File res2 = new File("gradle/wrapper");
     private final String largeBin = "zbt.tar.gz";
-    private TorrentServer server = new TorrentServerImpl();
+    private Servers server = new ServersImpl();
 
     @Rule
     public final TemporaryFolder sDir = new TemporaryFolder();

@@ -1,11 +1,10 @@
-package ru.spbau.mit.TorrentClient.TorrentFile;
+package ru.spbau.mit.ClientSide.TorrentFile;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import ru.spbau.mit.Protocol.RemoteFile;
 
 import java.io.File;
 import java.io.IOException;

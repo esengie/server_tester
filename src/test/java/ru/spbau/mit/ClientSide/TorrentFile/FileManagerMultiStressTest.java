@@ -1,4 +1,4 @@
-package ru.spbau.mit.TorrentClient.TorrentFile;
+package ru.spbau.mit.ClientSide.TorrentFile;
 
 import org.junit.*;
 import ru.spbau.mit.Common.WithFileManager;

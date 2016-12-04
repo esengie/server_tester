@@ -1,11 +1,11 @@
-package ru.spbau.mit.Protocol.Client;
+package ru.spbau.mit.Protocol.ClientSide;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import ru.spbau.mit.Common.WithFileManager;
-import ru.spbau.mit.TorrentClient.TorrentFile.FileManager;
+import ru.spbau.mit.ClientSide.TorrentFile.FileManager;
 
 import java.io.*;
 import java.util.HashSet;
@@ -19,7 +19,7 @@ public class SeedToClientProtocolImplTest {
     private DataInputStream outIn;
     private FileManager fm;
 
-    private final ClientProtocol client = new ClientProtocolImpl();
+    private final ClientProtocol client = new SyncTcpClientProtocol();
     private final SeedProtocolImpl seed = new SeedProtocolImpl();
     private final File res = new File("res");
 

@@ -1,11 +1,11 @@
-package ru.spbau.mit.Protocol.Server;
+package ru.spbau.mit.Protocol.ServerSide;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import ru.spbau.mit.Protocol.Client.ClientProtocol;
-import ru.spbau.mit.Protocol.Client.ClientProtocolImpl;
+import ru.spbau.mit.Protocol.ClientSide.ClientProtocol;
+import ru.spbau.mit.Protocol.ClientSide.SyncTcpClientProtocol;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -20,7 +20,7 @@ public class ServerToClientProtocolImplTest {
     private ByteArrayOutputStream inContent;
     private DataInputStream outIn;
 
-    ClientProtocol client = new ClientProtocolImpl();
+    ClientProtocol client = new SyncTcpClientProtocol();
     ServerProtocol server;
 
     @Rule
@@ -29,7 +29,7 @@ public class ServerToClientProtocolImplTest {
     @Before
     public void setUpStreams() throws IOException {
         try {
-            server = new ServerProtocolImpl(new File(folder.getRoot().getAbsolutePath()));
+            server = new SyncServerProtocol(new File(folder.getRoot().getAbsolutePath()));
         } catch (IOException e) {
             // cant happen
         }
