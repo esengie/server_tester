@@ -1,13 +1,12 @@
 package ru.spbau.mit.ClientSide;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import ru.spbau.mit.ServerSide.Servers;
-import ru.spbau.mit.ServerSide.ServersImpl;
+import ru.spbau.mit.ServerSide.TCP.TcpServer;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +26,7 @@ public class ClientsImplTest {
     private final File res1 = new File("res");
     private final File res2 = new File("gradle/wrapper");
     private final String largeBin = "zbt.tar.gz";
-    private Servers server = new ServersImpl();
+    private Servers server = new TcpServer();
 
     @Rule
     public final TemporaryFolder sDir = new TemporaryFolder();
