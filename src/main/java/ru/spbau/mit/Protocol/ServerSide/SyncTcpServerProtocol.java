@@ -3,8 +3,8 @@ package ru.spbau.mit.Protocol.ServerSide;
 import java.io.*;
 import java.util.List;
 
-import static ru.spbau.mit.Protocol.ClientSide.SyncTcpClientProtocol.formProtoMessage;
-import static ru.spbau.mit.Protocol.ClientSide.SyncTcpClientProtocol.readProtoMessage;
+import static ru.spbau.mit.Protocol.ClientSide.TcpClientProtocol.formProtoMessage;
+import static ru.spbau.mit.Protocol.ClientSide.TcpClientProtocol.readProtoMessage;
 
 public class SyncTcpServerProtocol implements ServerProtocol {
 

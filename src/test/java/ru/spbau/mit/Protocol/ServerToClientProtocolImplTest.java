@@ -3,13 +3,11 @@ package ru.spbau.mit.Protocol;
 import org.junit.Before;
 import org.junit.Test;
 import ru.spbau.mit.Protocol.ClientSide.ClientProtocol;
-import ru.spbau.mit.Protocol.ClientSide.SyncTcpClientProtocol;
+import ru.spbau.mit.Protocol.ClientSide.TcpClientProtocol;
 import ru.spbau.mit.Protocol.ServerSide.ServerProtocol;
 import ru.spbau.mit.Protocol.ServerSide.SyncTcpServerProtocol;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +17,7 @@ public class ServerToClientProtocolImplTest {
     private ByteArrayOutputStream outContent;
     private DataInputStream outIn;
 
-    ClientProtocol clientP = new SyncTcpClientProtocol();
+    ClientProtocol clientP = new TcpClientProtocol();
     ServerProtocol serverP = new SyncTcpServerProtocol();;
 
     @Before

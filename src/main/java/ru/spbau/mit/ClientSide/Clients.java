@@ -8,5 +8,5 @@ public interface Clients {
     void connect(String hostName) throws IOException;
     void disconnect() throws IOException;
 
-    List<Integer> executeRequest() throws IOException;
+    List<Integer> executeRequest(List<Integer> lst) throws IOException;
 }

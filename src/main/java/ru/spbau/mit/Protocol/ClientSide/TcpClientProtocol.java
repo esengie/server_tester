@@ -7,7 +7,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class SyncTcpClientProtocol implements ClientProtocol {
+public class TcpClientProtocol implements ClientProtocol {
 
     public static ArrayMessage formProtoMessage(List<Integer> data){
         return ArrayMessage.newBuilder()
