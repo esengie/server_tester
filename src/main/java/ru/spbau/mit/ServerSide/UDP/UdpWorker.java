@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-class UdpWorkerSimple implements Runnable {
+class UdpWorker implements Runnable {
     private final DatagramSocket socket;
     private final DatagramPacket packet;
     private final UdpProtocol protocol = new UdpProtocol();
 
-    UdpWorkerSimple(DatagramSocket socket, DatagramPacket packet) {
+    UdpWorker(DatagramSocket socket, DatagramPacket packet) {
         this.socket = socket;
         this.packet = packet;
     }

@@ -3,16 +3,10 @@ package ru.spbau.mit.ServerSide.UDP;
 import ru.spbau.mit.Protocol.ProtocolConstants;
 import ru.spbau.mit.ServerSide.ServerType;
 import ru.spbau.mit.ServerSide.Servers;
-import ru.spbau.mit.ServerSide.TCP.TcpPermWorker;
-import ru.spbau.mit.ServerSide.TCP.TcpTempWorker;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -30,7 +24,6 @@ public class UdpServer extends Servers {
         switch (type){
             case UDP_THREAD_PER_REQUEST:
             case UDP_FIXED_THREAD_POOL:
-            case UDP_ASYNC:
                 this.type = type;
                 return;
             default:
@@ -60,14 +53,12 @@ public class UdpServer extends Servers {
     private void submit(DatagramPacket packet) {
         switch (type){
             case UDP_THREAD_PER_REQUEST:
-                Thread t = new Thread(new UdpWorkerSimple(serverSocket, packet));
+                Thread t = new Thread(new UdpWorker(serverSocket, packet));
                 t.start();
                 break;
             case UDP_FIXED_THREAD_POOL:
-                threadPool.execute(new UdpWorkerSimple(serverSocket, packet));
+                threadPool.execute(new UdpWorker(serverSocket, packet));
                 break;
-            case UDP_ASYNC:
-//                new UdpWorkerAsync();
         }
     }
 
