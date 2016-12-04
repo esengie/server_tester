@@ -7,6 +7,7 @@ import ru.spbau.mit.ServerSide.TCP.TcpPermWorker;
 import ru.spbau.mit.ServerSide.TCP.TcpTempWorker;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,25 +17,24 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * All the tcp server types except for nonblocking one
+ * All the udp server types except for async one
  */
 public class UdpServer extends Servers {
     private DatagramSocket serverSocket = null;
 
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
+    private ExecutorService threadPool = Executors.newFixedThreadPool(10);
     private Thread serverThread = new Thread(new ServerThread());
-    private List<Thread> threads = new ArrayList<>();
     private ServerType type;
 
     public UdpServer(ServerType type) {
         switch (type){
-            case TCP_PERM_THREADS:
-            case TCP_PERM_CACHED_POOL:
-            case TCP_TEMP_SINGLE_THREAD:
+            case UDP_THREAD_PER_REQUEST:
+            case UDP_FIXED_THREAD_POOL:
+            case UDP_ASYNC:
                 this.type = type;
                 return;
             default:
-                throw new IllegalArgumentException("This is a strictly tcp server");
+                throw new IllegalArgumentException("This is a strictly udp server");
         }
     }
 
@@ -43,8 +43,10 @@ public class UdpServer extends Servers {
         public void run() {
             while (!isStopped()) {
                 try {
-                    Socket clientSocket = serverSocket.accept();
-                    submit(clientSocket);
+                    byte[] buffer = new byte[65508];
+                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                    serverSocket.receive(packet);
+                    submit(packet);
                 } catch (IOException e) {
                     if (isStopped()) {
                         break;
@@ -52,28 +54,26 @@ public class UdpServer extends Servers {
                 }
             }
             threadPool.shutdownNow();
-            threads.forEach(Thread::interrupt);
         }
     }
 
-    private void submit(Socket clientSocket) {
+    private void submit(DatagramPacket packet) {
         switch (type){
-            case TCP_PERM_THREADS:
-                Thread t = new Thread(new TcpPermWorker(clientSocket));
+            case UDP_THREAD_PER_REQUEST:
+                Thread t = new Thread(new UdpWorkerSimple(serverSocket, packet));
                 t.start();
-                threads.add(t);
                 break;
-            case TCP_PERM_CACHED_POOL:
-                threadPool.execute(new TcpPermWorker(clientSocket));
+            case UDP_FIXED_THREAD_POOL:
+                threadPool.execute(new UdpWorkerSimple(serverSocket, packet));
                 break;
-            case TCP_TEMP_SINGLE_THREAD:
-                new TcpTempWorker(clientSocket).run();
+            case UDP_ASYNC:
+//                new UdpWorkerAsync();
         }
     }
 
     @Override
     public void startHelper() throws IOException {
-        serverSocket = new ServerSocket(ProtocolConstants.SERVER_PORT);
+        serverSocket = new DatagramSocket(ProtocolConstants.SERVER_PORT);
         serverThread.start();
     }
 

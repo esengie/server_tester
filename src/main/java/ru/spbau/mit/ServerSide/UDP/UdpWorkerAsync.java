@@ -1,7 +1,7 @@
 package ru.spbau.mit.ServerSide.UDP;
 
 
-public class UdpWorker implements Runnable {
+public class UdpWorkerAsync implements Runnable {
     @Override
     public void run() {
 
