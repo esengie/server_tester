@@ -1,31 +1,38 @@
 package ru.spbau.mit.Protocol;
 
 import com.google.protobuf.InvalidProtocolBufferException;
-import ru.spbau.mit.ProtoMessage.Messages;
-import sun.rmi.runtime.Log;
+import ru.spbau.mit.Protocol.ClientSide.ClientProtocol;
+import ru.spbau.mit.Protocol.ClientSide.TcpClientProtocol;
 
-import java.net.DatagramPacket;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static ru.spbau.mit.Protocol.ClientSide.TcpClientProtocol.formProtoMessage;
-
 public class UdpProtocol {
+    public static final int MAX_PACKET = 65508;
     private static final Logger logger = Logger.getLogger(UdpProtocol.class.getName());
+    private final ClientProtocol protocol = new TcpClientProtocol();
 
-    public byte[] encodeArray(List<Integer> data){
-        Messages.ArrayMessage msg = formProtoMessage(data);
-        return msg.toByteArray();
+    public byte[] encodeArray(List<Integer> data) {
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        try {
+            protocol.sendRequest(new DataOutputStream(buf), data);
+        } catch (IOException e) {
+            //
+        }
+        return buf.toByteArray();
     }
 
     public List<Integer> decodeArray(byte[] buf) {
-        Messages.ArrayMessage msg = Messages.ArrayMessage.getDefaultInstance();
+        List<Integer> res = new ArrayList<>();
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(buf);
         try {
-            msg = Messages.ArrayMessage.parseFrom(buf);
-        } catch (InvalidProtocolBufferException e) {
+            res = protocol.readResponse(new DataInputStream(inputStream));
+        } catch (IOException e) {
             logger.log(Level.SEVERE, "This is an error in my usage", e);
         }
-        return msg.getElemList();
+        return res;
     }
 }
