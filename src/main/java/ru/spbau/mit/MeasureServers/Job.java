@@ -17,7 +17,7 @@ public class Job implements Callable<List<Integer>> {
         for (int i = 1; i < data.size(); ++i){
             int key = data.get(i);
             int j;
-            for (j = i - 1; j >= 0 && data.get(j) < key; --j){
+            for (j = i - 1; j >= 0 && data.get(j) > key; --j){
                 data.set(j + 1, data.get(j));
             }
             data.set(j + 1, key);

@@ -1,13 +1,12 @@
 package ru.spbau.mit.MeasureServers;
 
 import ru.spbau.mit.MeasureServers.TCP.TcpServer;
-import ru.spbau.mit.MeasureServers.UDP.UdpAsyncServer;
 import ru.spbau.mit.MeasureServers.UDP.UdpServer;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class ServerFactory {
-    public MeasureServer createServer(ServerType type){
-        switch (type){
+    public static MeasureServer createServer(ServerType type) {
+        switch (type) {
             case TCP_PERM_CACHED_POOL:
             case TCP_PERM_THREADS:
             case TCP_TEMP_SINGLE_THREAD:
@@ -19,7 +18,8 @@ public class ServerFactory {
                 throw new NotImplementedException();
             case TCP_PERM_NON_BLOCK:
                 throw new NotImplementedException();
+            default:
+                throw new NotImplementedException();
         }
-        return null;
     }
 }
