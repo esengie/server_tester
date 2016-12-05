@@ -1,4 +1,4 @@
-package ru.spbau.mit.MeasureServers.UDP;
+package ru.spbau.mit.MeasureServers.UDP.Workers;
 
 
 import ru.spbau.mit.Protocol.UdpProtocol;
@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-class UdpWorker implements Runnable {
+public class UdpWorker implements Runnable {
     private final DatagramSocket socket;
     private final DatagramPacket packet;
     private final UdpProtocol protocol = new UdpProtocol();
 
-    UdpWorker(DatagramSocket socket, DatagramPacket packet) {
+    public UdpWorker(DatagramSocket socket, DatagramPacket packet) {
         this.socket = socket;
         this.packet = packet;
     }
