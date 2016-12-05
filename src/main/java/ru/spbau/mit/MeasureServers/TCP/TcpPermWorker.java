@@ -1,8 +1,8 @@
-package ru.spbau.mit.ServerSide.TCP;
+package ru.spbau.mit.MeasureServers.TCP;
 
 import ru.spbau.mit.Protocol.ServerSide.ServerProtocol;
 import ru.spbau.mit.Protocol.ServerSide.SyncTcpServerProtocol;
-import ru.spbau.mit.ServerSide.Job;
+import ru.spbau.mit.MeasureServers.Job;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

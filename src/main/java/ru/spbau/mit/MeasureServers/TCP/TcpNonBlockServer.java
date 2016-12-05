@@ -1,10 +1,10 @@
-package ru.spbau.mit.ServerSide.UDP;
+package ru.spbau.mit.MeasureServers.TCP;
 
-import ru.spbau.mit.ServerSide.Servers;
+import ru.spbau.mit.MeasureServers.MeasureServer;
 
 import java.io.IOException;
 
-public class UdpAsyncServer extends Servers {
+public class TcpNonBlockServer extends MeasureServer {
     @Override
     protected void startHelper() throws IOException {
 

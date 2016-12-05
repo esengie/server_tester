@@ -1,8 +1,8 @@
-package ru.spbau.mit.ServerSide.UDP;
+package ru.spbau.mit.MeasureServers.UDP;
 
 
 import ru.spbau.mit.Protocol.UdpProtocol;
-import ru.spbau.mit.ServerSide.Job;
+import ru.spbau.mit.MeasureServers.Job;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

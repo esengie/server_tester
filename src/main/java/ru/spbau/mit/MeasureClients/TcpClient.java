@@ -1,4 +1,4 @@
-package ru.spbau.mit.ClientSide;
+package ru.spbau.mit.MeasureClients;
 
 import ru.spbau.mit.Protocol.ClientSide.ClientProtocol;
 import ru.spbau.mit.Protocol.ClientSide.TcpClientProtocol;
@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
 
-public class TcpClient implements Clients {
+public class TcpClient implements MeasureClient {
     private Socket socket = null;
     private String host = null;
     private final ClientProtocol protocol = new TcpClientProtocol();

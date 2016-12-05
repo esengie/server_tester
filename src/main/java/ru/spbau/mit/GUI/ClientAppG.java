@@ -1,7 +1,6 @@
 package ru.spbau.mit.GUI;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,27 +8,22 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ru.spbau.mit.ClientSide.Clients;
+import ru.spbau.mit.MeasureClients.MeasureClient;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class ClientAppG extends Application {
     private static final Logger logger = Logger.getLogger(ClientAppG.class.getName());
-    private static Clients client;
+    private static MeasureClient client;
     private static Thread lister;
 
     @FXML

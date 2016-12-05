@@ -1,12 +1,12 @@
-package ru.spbau.mit.ClientSide;
+package ru.spbau.mit.MeasureClients;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import ru.spbau.mit.ServerSide.Servers;
-import ru.spbau.mit.ServerSide.TCP.TcpServer;
+import ru.spbau.mit.MeasureServers.MeasureServer;
+import ru.spbau.mit.MeasureServers.TCP.TcpServer;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,16 +17,16 @@ import static junit.framework.TestCase.assertTrue;
 /**
  * Interaction test
  */
-public class ClientsImplTest {
-    private Clients cl1;
-    private Clients cl2;
+public class MeasureClientImplTest {
+    private MeasureClient cl1;
+    private MeasureClient cl2;
     private final short port1 = 8001;
     private final short port2 = 8002;
 
     private final File res1 = new File("res");
     private final File res2 = new File("gradle/wrapper");
     private final String largeBin = "zbt.tar.gz";
-    private Servers server = new TcpServer();
+    private MeasureServer server = new TcpServer();
 
     @Rule
     public final TemporaryFolder sDir = new TemporaryFolder();

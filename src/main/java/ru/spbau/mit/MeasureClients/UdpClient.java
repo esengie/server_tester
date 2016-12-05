@@ -1,4 +1,4 @@
-package ru.spbau.mit.ClientSide;
+package ru.spbau.mit.MeasureClients;
 
 import ru.spbau.mit.Protocol.ProtocolConstants;
 import ru.spbau.mit.Protocol.UdpProtocol;
@@ -10,7 +10,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.List;
 
-public class UdpClient implements Clients {
+public class UdpClient implements MeasureClient {
     private DatagramSocket socket = null;
     private SocketAddress serverAddress = null;
     private final UdpProtocol protocol = new UdpProtocol();

@@ -1,4 +1,4 @@
-package ru.spbau.mit.ServerSide;
+package ru.spbau.mit.MeasureServers;
 
 import java.util.ArrayList;
 import java.util.List;

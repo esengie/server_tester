@@ -1,8 +1,8 @@
-package ru.spbau.mit.ServerSide.TCP;
+package ru.spbau.mit.MeasureServers.TCP;
 
 import ru.spbau.mit.Protocol.ProtocolConstants;
-import ru.spbau.mit.ServerSide.ServerType;
-import ru.spbau.mit.ServerSide.Servers;
+import ru.spbau.mit.MeasureServers.ServerType;
+import ru.spbau.mit.MeasureServers.MeasureServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 /**
  * All the tcp server types except for nonblocking one
  */
-public class TcpServer extends Servers {
+public class TcpServer extends MeasureServer {
     private ServerSocket serverSocket = null;
 
     private ExecutorService threadPool = Executors.newCachedThreadPool();

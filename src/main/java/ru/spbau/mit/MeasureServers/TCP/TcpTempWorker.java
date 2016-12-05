@@ -1,16 +1,13 @@
-package ru.spbau.mit.ServerSide.TCP;
+package ru.spbau.mit.MeasureServers.TCP;
 
-import ru.spbau.mit.Protocol.ClientSide.ClientProtocol;
-import ru.spbau.mit.Protocol.ClientSide.TcpClientProtocol;
 import ru.spbau.mit.Protocol.ServerSide.ServerProtocol;
 import ru.spbau.mit.Protocol.ServerSide.SyncTcpServerProtocol;
-import ru.spbau.mit.ServerSide.Job;
+import ru.spbau.mit.MeasureServers.Job;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.List;
 
 public class TcpTempWorker implements Runnable {

@@ -1,10 +1,10 @@
-package ru.spbau.mit.ClientSide;
+package ru.spbau.mit.MeasureClients;
 
 import java.io.IOException;
 import java.util.List;
 
 
-public interface Clients {
+public interface MeasureClient {
     void connect(String hostName) throws IOException;
     void disconnect() throws IOException;
 

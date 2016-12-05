@@ -1,8 +1,8 @@
-package ru.spbau.mit.ServerSide.UDP;
+package ru.spbau.mit.MeasureServers.UDP;
 
 import ru.spbau.mit.Protocol.ProtocolConstants;
-import ru.spbau.mit.ServerSide.ServerType;
-import ru.spbau.mit.ServerSide.Servers;
+import ru.spbau.mit.MeasureServers.ServerType;
+import ru.spbau.mit.MeasureServers.MeasureServer;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 /**
  * All the udp server types except for async one
  */
-public class UdpServer extends Servers {
+public class UdpServer extends MeasureServer {
     private DatagramSocket serverSocket = null;
 
     private ExecutorService threadPool = Executors.newFixedThreadPool(10);
