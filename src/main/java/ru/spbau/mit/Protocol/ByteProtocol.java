@@ -1,6 +1,5 @@
 package ru.spbau.mit.Protocol;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import ru.spbau.mit.Protocol.ClientSide.ClientProtocol;
 import ru.spbau.mit.Protocol.ClientSide.TcpClientProtocol;
 
@@ -10,9 +9,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UdpProtocol {
+public class ByteProtocol {
     public static final int MAX_PACKET = 65508;
-    private static final Logger logger = Logger.getLogger(UdpProtocol.class.getName());
+    private static final Logger logger = Logger.getLogger(ByteProtocol.class.getName());
     private final ClientProtocol protocol = new TcpClientProtocol();
 
     public byte[] encodeArray(List<Integer> data) {

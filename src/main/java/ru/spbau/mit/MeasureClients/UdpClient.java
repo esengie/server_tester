@@ -1,7 +1,7 @@
 package ru.spbau.mit.MeasureClients;
 
 import ru.spbau.mit.Protocol.ProtocolConstants;
-import ru.spbau.mit.Protocol.UdpProtocol;
+import ru.spbau.mit.Protocol.ByteProtocol;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -13,7 +13,7 @@ import java.util.List;
 public class UdpClient implements MeasureClient {
     private DatagramSocket socket = null;
     private SocketAddress serverAddress = null;
-    private final UdpProtocol protocol = new UdpProtocol();
+    private final ByteProtocol protocol = new ByteProtocol();
 
     @Override
     public void connect(String hostName) throws IOException {

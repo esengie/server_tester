@@ -1,36 +1,39 @@
 package ru.spbau.mit.MeasureServers.TCP.Workers;
 
+import ru.spbau.mit.MeasureServers.Job;
+import ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp.BufferedMessage;
+import ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp.MessageState;
+import ru.spbau.mit.Protocol.ByteProtocol;
 
-import ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp.ServerDataEvent;
-import ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp.TcpNonBlockServer;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.util.List;
 
-import java.nio.channels.SocketChannel;
-import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+public class NonBlockWorker implements Runnable {
+    private final Selector selector;
+    private final SelectionKey key;
+    private final BufferedMessage msg;
 
-public class NonBlockWorker {
-    public class EchoWorker implements Runnable {
-        private Queue<ServerDataEvent> queue = new ConcurrentLinkedQueue<>();
+    public NonBlockWorker(Selector selector, SelectionKey key, BufferedMessage msg) {
+        this.selector = selector;
+        this.key = key;
+        this.msg = msg;
+    }
 
-        public void processData(TcpNonBlockServer server, SocketChannel socket, byte[] data, int count) {
-            byte[] dataCopy = new byte[count];
-            System.arraycopy(data, 0, dataCopy, 0, count);
-            queue.add(new ServerDataEvent(server, socket, dataCopy));
-        }
+    @Override
+    public void run() {
+        ByteProtocol protocol = new ByteProtocol();
 
-        public void run() {
-            ServerDataEvent dataEvent;
+        ByteBuffer buf = ByteBuffer.allocate(msg.sizeBuf.limit() + msg.data.limit());
+        buf.put(msg.sizeBuf); buf.put(msg.data);
+        List<Integer> lst = protocol.decodeArray(buf.array());
 
-            while(true) {
-                // Wait for data to become available
-                synchronized(queue) {
-                    dataEvent = queue.poll();
-                }
+        Job job = new Job(lst);
+        msg.data = ByteBuffer.wrap(protocol.encodeArray(job.call()));
 
-                // Return to sender
-                dataEvent.server.send(dataEvent.socket, dataEvent.data);
-            }
-        }
+        key.interestOps(SelectionKey.OP_WRITE);
+        msg.state = MessageState.WAITING_TO_WRITE;
+        selector.wakeup();
     }
 }

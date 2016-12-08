@@ -4,7 +4,7 @@ import ru.spbau.mit.MeasureServers.UDP.Workers.UdpWorker;
 import ru.spbau.mit.Protocol.ProtocolConstants;
 import ru.spbau.mit.MeasureServers.ServerType;
 import ru.spbau.mit.MeasureServers.MeasureServer;
-import ru.spbau.mit.Protocol.UdpProtocol;
+import ru.spbau.mit.Protocol.ByteProtocol;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -38,7 +38,7 @@ public class UdpServer extends MeasureServer {
         public void run() {
             while (!isStopped()) {
                 try {
-                    byte[] buffer = new byte[UdpProtocol.MAX_PACKET];
+                    byte[] buffer = new byte[ByteProtocol.MAX_PACKET];
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     serverSocket.receive(packet);
                     submit(packet);

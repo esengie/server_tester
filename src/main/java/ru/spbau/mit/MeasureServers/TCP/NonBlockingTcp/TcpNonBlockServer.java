@@ -1,11 +1,11 @@
 package ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp;
 
 import ru.spbau.mit.MeasureServers.MeasureServer;
+import ru.spbau.mit.MeasureServers.TCP.Workers.NonBlockWorker;
 import ru.spbau.mit.Protocol.ProtocolConstants;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -13,50 +13,33 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TcpNonBlockServer extends MeasureServer {
     private ServerSocketChannel serverChannel;
     private Selector selector;
 
     private Thread serverThread = new Thread(new ServerThread());
+    private ExecutorService pool = Executors.newFixedThreadPool(10);
     private ByteBuffer readBuffer = ByteBuffer.allocate(8192);
-
-    private List<ChangeRequest> pendingChanges = new ArrayList<>();
-
-    // Maps a SocketChannel to a list of ByteBuffer instances
-    private Map<SocketChannel, ByteBuffer> pendingData = new HashMap<>();
 
     private class ServerThread implements Runnable {
         @Override
         public void run() {
-            while (!isStopped()) {
+            while (serverChannel.isOpen() && !isStopped()) {
                 try {
-                    synchronized (changeRequests) {
-                        Iterator changes = changeRequests.iterator();
-                        while (changes.hasNext()) {
-                            ChangeRequest change = (ChangeRequest) changes.next();
-                            switch (change.type) {
-                                case ChangeRequest.CHANGEOPS:
-                                    SelectionKey key = change.socket.keyFor(this.selector);
-                                    key.interestOps(change.ops);
-                            }
-                        }
-                        changeRequests.clear();
-                    }
+                    int ready = selector.select();
+                    if(ready == 0) continue;
 
-                    // Wait for an event one of the registered channels
-                    selector.select();
-
-                    // Iterate over the set of keys for which events are available
-                    Iterator selectedKeys = selector.selectedKeys().iterator();
+                    Iterator<SelectionKey> selectedKeys = selector.selectedKeys().iterator();
                     while (selectedKeys.hasNext()) {
-                        SelectionKey key = (SelectionKey) selectedKeys.next();
+                        SelectionKey key = selectedKeys.next();
                         selectedKeys.remove();
 
                         if (!key.isValid()) {
                             continue;
                         }
-
                         if (key.isAcceptable()) {
                             accept(key);
                         } else if (key.isReadable()) {
@@ -65,7 +48,6 @@ public class TcpNonBlockServer extends MeasureServer {
                             write(key);
                         }
                     }
-
                 } catch (IOException e) {
                     if (isStopped()) {
                         break;
@@ -78,78 +60,54 @@ public class TcpNonBlockServer extends MeasureServer {
 
     private void read(SelectionKey key) throws IOException {
         SocketChannel socketChannel = (SocketChannel) key.channel();
+        BufferedMessage msg = (BufferedMessage) key.attachment();
 
-        // Clear out our read buffer so it's ready for new data
-        this.readBuffer.clear();
-
-        // Attempt to read off the channel
-        int numRead;
+        int numRead = 0;
         try {
-            numRead = socketChannel.read(this.readBuffer);
+            switch(msg.state){
+                case EMPTY:
+                    numRead = socketChannel.read(msg.sizeBuf);
+                    if (msg.sizeBuf.hasRemaining())
+                        break;
+                    // we've read sizeBuf
+                    msg.state = MessageState.READING_DATA;
+                    msg.sizeBuf.flip();
+                    msg.sizeBuf.mark();
+                    msg.data = ByteBuffer.allocate(msg.sizeBuf.getInt());
+                    msg.sizeBuf.reset();
+                case READING_DATA:
+                    numRead += socketChannel.read(msg.data);
+                    if (msg.data.hasRemaining())
+                        break;
+                    msg.state = MessageState.PROCESSING;
+                    msg.data.flip();
+                    pool.execute(new NonBlockWorker(selector, key, msg));
+            }
         } catch (IOException e) {
-            // The remote forcibly closed the connection, cancel
-            // the selection key and close the channel.
             key.cancel();
             socketChannel.close();
             return;
         }
 
         if (numRead == -1) {
-            // Remote entity shut the socket down cleanly. Do the
-            // same from our end and cancel the channel.
-            key.channel().close();
+            socketChannel.close();
             key.cancel();
-            return;
         }
-
-        // Hand the data off to our worker thread
-//        this.worker.processData(this, socketChannel, this.readBuffer.array(), numRead);
     }
-
-    public void send(SocketChannel socket, byte[] data) {
-        synchronized (pendingChanges) {
-            // Indicate we want the interest ops set changed
-            pendingChanges.add(new ChangeRequest(socket, ChangeRequest.CHANGEOPS, SelectionKey.OP_WRITE));
-
-            // And queue the data we want written
-            synchronized (pendingData) {
-                List queue = (List) this.pendingData.get(socket);
-                if (queue == null) {
-                    queue = new ArrayList();
-                    this.pendingData.put(socket, queue);
-                }
-                queue.add(ByteBuffer.wrap(data));
-            }
-        }
-
-        // Finally, wake up our selecting thread so it can make the required changes
-        selector.wakeup();
-    }
-
 
     private void write(SelectionKey key) throws IOException {
         SocketChannel socketChannel = (SocketChannel) key.channel();
+        BufferedMessage msg = (BufferedMessage) key.attachment();
 
-        synchronized (pendingData) {
-            List queue = (List) this.pendingData.get(socketChannel);
-
-            // Write until there's not more data ...
-            while (!queue.isEmpty()) {
-                ByteBuffer buf = (ByteBuffer) queue.get(0);
-                socketChannel.write(buf);
-                if (buf.remaining() > 0) {
-                    // ... or the socket's buffer fills up
+        switch (msg.state){
+            case WAITING_TO_WRITE:
+                socketChannel.write(msg.data);
+                if (msg.data.hasRemaining())
                     break;
-                }
-                queue.remove(0);
-            }
-
-            if (queue.isEmpty()) {
-                // We wrote away all data, so we're no longer interested
-                // in writing on this socket. Switch back to waiting for
-                // data.
+                msg.state = MessageState.EMPTY;
+                msg.sizeBuf.clear();
                 key.interestOps(SelectionKey.OP_READ);
-            }
+                selector.wakeup();
         }
     }
 
@@ -157,10 +115,10 @@ public class TcpNonBlockServer extends MeasureServer {
         ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
 
         SocketChannel socketChannel = serverSocketChannel.accept();
-        Socket socket = socketChannel.socket();
         socketChannel.configureBlocking(false);
+//        socketChannel.socket().setTcpNoDelay(true);
 
-        socketChannel.register(this.selector, SelectionKey.OP_READ);
+        socketChannel.register(selector, SelectionKey.OP_READ, new BufferedMessage());
     }
 
     @Override

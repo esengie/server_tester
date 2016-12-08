@@ -29,9 +29,10 @@ public class MeasureClientServerTest {
     private MeasureClient client;
     private MeasureServer server;
 
-    private void start(ServerType type) throws IOException {
+    private void start(ServerType type) throws IOException, InterruptedException {
         server = ServerFactory.createServer(type);
         server.start();
+        Thread.sleep(100);
         client = ClientFactory.createClient(type);
         client.connect("localhost");
     }
@@ -43,15 +44,7 @@ public class MeasureClientServerTest {
     }
 
     @Test(timeout = 2000)
-    public void tcpPerm() throws IOException{
-        ServerType type = ServerType.TCP_PERM_THREADS;
-        start(type);
-        executeGet(type);
-        executeGet(type);
-    }
-
-    @Test(timeout = 2000)
-    public void tcpTemp() throws IOException{
+    public void tcpTemp() throws IOException, InterruptedException {
         ServerType type = ServerType.TCP_TEMP_SINGLE_THREAD;
         start(type);
         executeGet(type);
@@ -59,7 +52,23 @@ public class MeasureClientServerTest {
     }
 
     @Test(timeout = 2000)
-    public void udp() throws IOException{
+    public void tcpPerm() throws IOException, InterruptedException {
+        ServerType type = ServerType.TCP_PERM_THREADS;
+        start(type);
+        executeGet(type);
+        executeGet(type);
+    }
+
+    @Test(timeout = 2000)
+    public void tcpNonBlock() throws IOException, InterruptedException {
+        ServerType type = ServerType.TCP_PERM_NON_BLOCK;
+        start(type);
+        executeGet(type);
+        executeGet(type);
+    }
+
+    @Test(timeout = 2000)
+    public void udp() throws IOException, InterruptedException {
         ServerType type = ServerType.UDP_THREAD_PER_REQUEST;
         start(type);
         executeGet(type);
