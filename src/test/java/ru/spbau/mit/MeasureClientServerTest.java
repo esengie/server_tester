@@ -1,20 +1,14 @@
 package ru.spbau.mit;
 
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import ru.spbau.mit.MeasureClients.ClientFactory;
 import ru.spbau.mit.MeasureClients.MeasureClient;
 import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.MeasureServers.ServerFactory;
 import ru.spbau.mit.MeasureServers.ServerType;
-import ru.spbau.mit.MeasureServers.TCP.TcpServer;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -62,6 +56,14 @@ public class MeasureClientServerTest {
     @Test(timeout = 2000)
     public void tcpNonBlock() throws IOException, InterruptedException {
         ServerType type = ServerType.TCP_PERM_NON_BLOCK;
+        start(type);
+        executeGet(type);
+        executeGet(type);
+    }
+
+    @Test(timeout = 2000)
+    public void tcpAsync() throws IOException, InterruptedException {
+        ServerType type = ServerType.TCP_PERM_ASYNC;
         start(type);
         executeGet(type);
         executeGet(type);

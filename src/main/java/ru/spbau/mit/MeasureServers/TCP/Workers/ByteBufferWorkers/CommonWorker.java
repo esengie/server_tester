@@ -1,23 +1,17 @@
-package ru.spbau.mit.MeasureServers.TCP.Workers;
+package ru.spbau.mit.MeasureServers.TCP.Workers.ByteBufferWorkers;
 
 import ru.spbau.mit.MeasureServers.Job;
-import ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp.BufferedMessage;
+import ru.spbau.mit.MeasureServers.TCP.BufferedMessage;
 import ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp.MessageState;
 import ru.spbau.mit.Protocol.ByteProtocol;
 
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
 import java.util.List;
 
-public class NonBlockWorker implements Runnable {
-    private final Selector selector;
-    private final SelectionKey key;
-    private final BufferedMessage msg;
+public class CommonWorker implements Runnable {
+    protected final BufferedMessage msg;
 
-    public NonBlockWorker(Selector selector, SelectionKey key, BufferedMessage msg) {
-        this.selector = selector;
-        this.key = key;
+    protected CommonWorker(BufferedMessage msg){
         this.msg = msg;
     }
 
@@ -31,9 +25,6 @@ public class NonBlockWorker implements Runnable {
 
         Job job = new Job(lst);
         msg.data = ByteBuffer.wrap(protocol.encodeArray(job.call()));
-
-        key.interestOps(SelectionKey.OP_WRITE);
         msg.state = MessageState.WAITING_TO_WRITE;
-        selector.wakeup();
     }
 }

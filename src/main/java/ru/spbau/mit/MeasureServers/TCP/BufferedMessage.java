@@ -1,4 +1,6 @@
-package ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp;
+package ru.spbau.mit.MeasureServers.TCP;
+
+import ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp.MessageState;
 
 import java.nio.ByteBuffer;
 

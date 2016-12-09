@@ -1,7 +1,8 @@
 package ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp;
 
 import ru.spbau.mit.MeasureServers.MeasureServer;
-import ru.spbau.mit.MeasureServers.TCP.Workers.NonBlockWorker;
+import ru.spbau.mit.MeasureServers.TCP.BufferedMessage;
+import ru.spbau.mit.MeasureServers.TCP.Workers.ByteBufferWorkers.NonBlockWorker;
 import ru.spbau.mit.Protocol.ProtocolConstants;
 
 import java.io.IOException;
@@ -22,7 +23,6 @@ public class TcpNonBlockServer extends MeasureServer {
 
     private Thread serverThread = new Thread(new ServerThread());
     private ExecutorService pool = Executors.newFixedThreadPool(10);
-    private ByteBuffer readBuffer = ByteBuffer.allocate(8192);
 
     private class ServerThread implements Runnable {
         @Override
@@ -116,7 +116,6 @@ public class TcpNonBlockServer extends MeasureServer {
 
         SocketChannel socketChannel = serverSocketChannel.accept();
         socketChannel.configureBlocking(false);
-//        socketChannel.socket().setTcpNoDelay(true);
 
         socketChannel.register(selector, SelectionKey.OP_READ, new BufferedMessage());
     }
@@ -128,9 +127,8 @@ public class TcpNonBlockServer extends MeasureServer {
         serverChannel = ServerSocketChannel.open();
         serverChannel.configureBlocking(false);
 
-        InetSocketAddress isa = new InetSocketAddress("localhost",
-                ProtocolConstants.SERVER_PORT);
-        serverChannel.socket().bind(isa);
+        serverChannel.bind(new InetSocketAddress("localhost",
+                ProtocolConstants.SERVER_PORT));
         serverChannel.register(selector, SelectionKey.OP_ACCEPT);
 
         serverThread.start();
@@ -139,5 +137,6 @@ public class TcpNonBlockServer extends MeasureServer {
     @Override
     protected void stopHelper() throws IOException {
         serverChannel.close();
+        pool.shutdown();
     }
 }

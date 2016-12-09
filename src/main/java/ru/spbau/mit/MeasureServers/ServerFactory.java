@@ -1,5 +1,6 @@
 package ru.spbau.mit.MeasureServers;
 
+import ru.spbau.mit.MeasureServers.TCP.AsyncTcp.TcpAsyncServer;
 import ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp.TcpNonBlockServer;
 import ru.spbau.mit.MeasureServers.TCP.TcpServer;
 import ru.spbau.mit.MeasureServers.UDP.UdpServer;
@@ -15,8 +16,8 @@ public class ServerFactory {
             case UDP_FIXED_THREAD_POOL:
             case UDP_THREAD_PER_REQUEST:
                 return new UdpServer(type);
-            case TCP_ASYNC:
-                throw new NotImplementedException();
+            case TCP_PERM_ASYNC:
+                return new TcpAsyncServer();
             case TCP_PERM_NON_BLOCK:
                 return new TcpNonBlockServer();
             default:
