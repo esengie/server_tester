@@ -1,6 +1,6 @@
 package ru.spbau.mit.MeasureServers.TCP.AsyncTcp.Handlers;
 
-import ru.spbau.mit.MeasureServers.TCP.BufferedMessage;
+import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.BufferedMessage;
 
 import java.io.IOException;
 import java.nio.channels.AsynchronousSocketChannel;

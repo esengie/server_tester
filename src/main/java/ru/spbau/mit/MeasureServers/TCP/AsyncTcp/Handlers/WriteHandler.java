@@ -1,10 +1,8 @@
 package ru.spbau.mit.MeasureServers.TCP.AsyncTcp.Handlers;
 
 
-import ru.spbau.mit.MeasureServers.TCP.AsyncTcp.Handlers.CommonChannelHandler;
-import ru.spbau.mit.MeasureServers.TCP.AsyncTcp.Handlers.ReadHandler;
-import ru.spbau.mit.MeasureServers.TCP.BufferedMessage;
-import ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp.MessageState;
+import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.BufferedMessage;
+import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.MessageState;
 
 import java.nio.channels.AsynchronousSocketChannel;
 

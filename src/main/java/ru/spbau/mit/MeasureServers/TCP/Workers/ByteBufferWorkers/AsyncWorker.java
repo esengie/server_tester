@@ -1,7 +1,7 @@
 package ru.spbau.mit.MeasureServers.TCP.Workers.ByteBufferWorkers;
 
 import ru.spbau.mit.MeasureServers.TCP.AsyncTcp.Handlers.WriteHandler;
-import ru.spbau.mit.MeasureServers.TCP.BufferedMessage;
+import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.BufferedMessage;
 
 import java.nio.channels.AsynchronousSocketChannel;
 
