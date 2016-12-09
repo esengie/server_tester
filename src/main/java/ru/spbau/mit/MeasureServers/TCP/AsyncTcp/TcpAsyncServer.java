@@ -19,24 +19,23 @@ public class TcpAsyncServer extends MeasureServer {
         serverChannel = AsynchronousServerSocketChannel.open();
         serverChannel.bind(new InetSocketAddress("localhost",
                 ProtocolConstants.SERVER_PORT));
-        serverChannel.accept(new BufferedMessage(), new AcceptHandler());
+        serverChannel.accept(new BufferedMessage(), new CompletionHandler<AsynchronousSocketChannel, BufferedMessage>() {
+            @Override
+            public void completed(AsynchronousSocketChannel channel, BufferedMessage msg) {
+                serverChannel.accept(new BufferedMessage(), this);
+                channel.read(msg.sizeBuf, msg, new ReadHandler(channel));
+            }
+
+            @Override
+            public void failed(Throwable throwable, BufferedMessage bufferedMessage) {
+                //err
+            }
+        });
     }
 
     @Override
     protected void stopHelper() throws IOException {
         serverChannel.close();
         ReadHandler.shutdownPool();
-    }
-
-    private static class AcceptHandler implements CompletionHandler<AsynchronousSocketChannel, BufferedMessage> {
-        @Override
-        public void completed(AsynchronousSocketChannel channel, BufferedMessage msg) {
-            channel.read(msg.sizeBuf, msg, new ReadHandler(channel));
-        }
-
-        @Override
-        public void failed(Throwable throwable, BufferedMessage msg) {
-            //
-        }
     }
 }

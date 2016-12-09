@@ -20,20 +20,23 @@ import static junit.framework.TestCase.assertTrue;
  * Interaction test
  */
 public class MeasureClientServerTest {
-    private MeasureClient client;
+    private MeasureClient client1;
+    private MeasureClient client2;
     private MeasureServer server;
 
     private void start(ServerType type) throws IOException, InterruptedException {
         server = ServerFactory.createServer(type);
         server.start();
         Thread.sleep(100);
-        client = ClientFactory.createClient(type);
-        client.connect("localhost");
+        client1 = ClientFactory.createClient(type);
+        client1.connect("localhost");
+        client2 = ClientFactory.createClient(type);
+        client2.connect("localhost");
     }
 
     @After
     public void stop() throws IOException {
-        client.disconnect();
+        client1.disconnect();
         server.stop();
     }
 
@@ -78,9 +81,11 @@ public class MeasureClientServerTest {
 
     private void executeGet(ServerType type) throws IOException {
         List<Integer> msg = Arrays.asList(3,1,45,-123);
-        List<Integer> res = client.executeRequest(msg);
+        List<Integer> res1 = client1.executeRequest(msg);
+        List<Integer> res2 = client2.executeRequest(msg);
 
         Collections.sort(msg);
-        assertEquals(msg, res);
+        assertEquals(msg, res1);
+        assertEquals(msg, res2);
     }
 }
