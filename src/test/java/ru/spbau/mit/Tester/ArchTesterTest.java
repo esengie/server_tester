@@ -14,7 +14,7 @@ public class ArchTesterTest {
     private final int timeout = 10000000;
 
     private void config(ServerType type) {
-        config = new UserConfig(10, 500, 100, 5, type);
+        config = new UserConfig(100000, 2, 100, 1, type);
         tester = new ArchTester(config);
     }
 
@@ -24,7 +24,7 @@ public class ArchTesterTest {
         tester.testOnce();
     }
 
-//    @Ignore
+    @Ignore
     @Test(timeout = timeout)
     public void testTempTCP() throws Exception {
         config(ServerType.TCP_TEMP_SINGLE_THREAD);
@@ -45,19 +45,21 @@ public class ArchTesterTest {
         runCommon();
     }
 
+    @Ignore
     @Test(timeout = timeout)
     public void testNonBlockPermTCP() throws Exception {
         config(ServerType.TCP_PERM_NON_BLOCK);
         runCommon();
     }
 
+    @Ignore
     @Test(timeout = timeout)
     public void testAsyncPermTCP() throws Exception {
         config(ServerType.TCP_PERM_ASYNC);
         runCommon();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testFixedPoolUDP() throws Exception {
         config(ServerType.UDP_FIXED_THREAD_POOL);
