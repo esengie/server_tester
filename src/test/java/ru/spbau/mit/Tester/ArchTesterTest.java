@@ -1,6 +1,5 @@
 package ru.spbau.mit.Tester;
 
-import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
 import ru.spbau.mit.MeasureServers.ServerType;
@@ -22,10 +21,10 @@ public class ArchTesterTest {
     private void runCommon() throws IOException {
         tester.testOnce();
         config.setArraySize(200);
-//        tester.testOnce();
+        tester.testOnce();
     }
 
-//    @Ignore
+        @Ignore
     @Test(timeout = timeout)
     public void testTempTCP() throws Exception {
         config(ServerType.TCP_TEMP_SINGLE_THREAD);

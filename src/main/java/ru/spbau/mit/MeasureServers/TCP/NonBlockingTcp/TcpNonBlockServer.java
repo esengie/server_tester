@@ -30,7 +30,7 @@ public class TcpNonBlockServer extends MeasureServer {
         public void run() {
             while (serverChannel.isOpen() && !isStopped()) {
                 try {
-                    int ready = selector.select();
+                    int ready = selector.select(50);
                     if(ready == 0) continue;
 
                     Iterator<SelectionKey> selectedKeys = selector.selectedKeys().iterator();
@@ -139,5 +139,10 @@ public class TcpNonBlockServer extends MeasureServer {
     protected void stopHelper() throws IOException {
         serverChannel.close();
         pool.shutdown();
+        try {
+            serverThread.join();
+        } catch (InterruptedException e) {
+            //
+        }
     }
 }

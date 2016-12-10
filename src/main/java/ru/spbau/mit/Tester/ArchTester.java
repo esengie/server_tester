@@ -21,16 +21,17 @@ public class ArchTester {
 
     private final UserConfig config;
     private final List<MeasureClient> clients = new ArrayList<>();
-    private final MeasureServer server;
 
     public ArchTester(UserConfig config) {
         this.config = config;
-        server = ServerFactory.createServer(config.getServerType());
     }
 
     public void testOnce() throws IOException {
         ExecutorService pool = Executors.newCachedThreadPool();
+        MeasureServer server = ServerFactory.createServer(config.getServerType());
         server.start();
+        clients.clear();
+
         for (int i = 0; i < config.getClientsSize(); ++i) {
             clients.add(ClientFactory.createClient(config.getServerType()));
         }

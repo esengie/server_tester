@@ -15,7 +15,6 @@ public abstract class MeasureServer {
     public void start() throws IOException{
         if (serverState != ServiceState.PREINIT)
             return;
-        serverState = ServiceState.STOPPED;
         startHelper();
         serverState = ServiceState.RUNNING;
     }

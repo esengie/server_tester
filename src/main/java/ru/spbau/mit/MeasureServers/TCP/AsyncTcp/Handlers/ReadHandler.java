@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ReadHandler extends CommonChannelHandler {
-    static ExecutorService pool = Executors.newFixedThreadPool(10);
+    static ExecutorService pool;
 
     public ReadHandler(AsynchronousSocketChannel channel) {
         super(channel);
@@ -44,7 +44,10 @@ public class ReadHandler extends CommonChannelHandler {
         }
     }
 
+    public static void startupPool() {
+        pool = Executors.newFixedThreadPool(10);
+    }
     public static void shutdownPool() {
-        pool.shutdown();
+        pool.shutdownNow();
     }
 }

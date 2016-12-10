@@ -20,6 +20,7 @@ public class TcpAsyncServer extends MeasureServer {
 
     @Override
     protected void startHelper() throws IOException {
+        ReadHandler.startupPool();
         serverChannel = AsynchronousServerSocketChannel.open();
         serverChannel.bind(new InetSocketAddress("localhost",
                 ProtocolConstants.SERVER_PORT));
