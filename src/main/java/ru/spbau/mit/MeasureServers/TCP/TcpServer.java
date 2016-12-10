@@ -9,6 +9,7 @@ import ru.spbau.mit.MeasureServers.MeasureServer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -84,6 +85,12 @@ public class TcpServer extends MeasureServer {
     @Override
     public void stopHelper() throws IOException {
         serverSocket.close();
+        try {
+            Socket poisonPill = new Socket("localhost", ProtocolConstants.SERVER_PORT);
+            serverThread.join();
+        } catch (InterruptedException | SocketException e) {
+            //
+        }
     }
 
 }

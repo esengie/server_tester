@@ -20,11 +20,11 @@ public class ArchTesterTest {
 
     private void runCommon() throws IOException {
         tester.testOnce();
-        config.setArraySize(200);
+        config.setArraySize(20);
         tester.testOnce();
     }
 
-        @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testTempTCP() throws Exception {
         config(ServerType.TCP_TEMP_SINGLE_THREAD);
