@@ -8,18 +8,15 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.List;
 
-public class TcpClient implements MeasureClient {
+public class TcpClientPerm implements MeasureClient {
     private Socket socket = null;
-    private String host = null;
     private final ClientProtocol protocol = new TcpClientProtocol();
 
     @Override
     public void connect(String hostName) throws IOException {
-        host = hostName;
-        socket = new Socket(host, ProtocolConstants.SERVER_PORT);
+        socket = new Socket(hostName, ProtocolConstants.SERVER_PORT);
     }
 
     @Override
@@ -29,12 +26,7 @@ public class TcpClient implements MeasureClient {
 
     @Override
     public List<Integer> executeRequest(List<Integer> lst) throws IOException {
-        try {
-            protocol.sendRequest(new DataOutputStream(socket.getOutputStream()), lst);
-        } catch (SocketException e) {
-            connect(host);
-            protocol.sendRequest(new DataOutputStream(socket.getOutputStream()), lst);
-        }
+        protocol.sendRequest(new DataOutputStream(socket.getOutputStream()), lst);
         return protocol.readResponse(new DataInputStream(socket.getInputStream()));
     }
 }

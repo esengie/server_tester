@@ -11,13 +11,17 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * All the tcp server types except for nonblocking one
  */
 public class TcpServer extends MeasureServer {
+    private static final Logger logger = Logger.getLogger(TcpServer.class.getName());
     private ServerSocket serverSocket = null;
 
     private ExecutorService threadPool = Executors.newCachedThreadPool();
@@ -48,6 +52,7 @@ public class TcpServer extends MeasureServer {
                     if (isStopped()) {
                         break;
                     }
+                    logger.log(Level.WARNING, e.toString());
                 }
             }
             threadPool.shutdownNow();

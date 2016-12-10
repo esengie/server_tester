@@ -1,5 +1,6 @@
 package ru.spbau.mit.MeasureServers.TCP.AsyncTcp.Handlers;
 
+import ru.spbau.mit.MeasureServers.TCP.AsyncTcp.TcpAsyncServer;
 import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.BufferedMessage;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class CommonChannelHandler implements CompletionHandler<Integer, BufferedMessage> {
-    private static final Logger logger = Logger.getLogger(CommonChannelHandler.class.getName());
+    private static final Logger logger = Logger.getLogger(TcpAsyncServer.class.getName());
     protected final AsynchronousSocketChannel channel;
 
     protected CommonChannelHandler(AsynchronousSocketChannel channel) {

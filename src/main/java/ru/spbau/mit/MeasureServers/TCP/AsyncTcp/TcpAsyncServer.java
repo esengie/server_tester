@@ -10,8 +10,12 @@ import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TcpAsyncServer extends MeasureServer {
+    private static final Logger logger = Logger.getLogger(TcpAsyncServer.class.getName());
+
     private AsynchronousServerSocketChannel serverChannel;
 
     @Override
@@ -28,7 +32,7 @@ public class TcpAsyncServer extends MeasureServer {
 
             @Override
             public void failed(Throwable throwable, BufferedMessage bufferedMessage) {
-                //err
+                logger.log(Level.FINE, throwable.toString());
             }
         });
     }

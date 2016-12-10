@@ -1,5 +1,6 @@
 package ru.spbau.mit.MeasureServers.TCP.Workers;
 
+import ru.spbau.mit.MeasureServers.TCP.TcpServer;
 import ru.spbau.mit.Protocol.ServerSide.ServerProtocol;
 import ru.spbau.mit.Protocol.ServerSide.SyncTcpServerProtocol;
 import ru.spbau.mit.MeasureServers.Job;
@@ -9,8 +10,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TcpTempWorker implements Runnable {
+    private static final Logger logger = Logger.getLogger(TcpServer.class.getName());
+
     private Socket clientSocket;
     private ServerProtocol protocol = new SyncTcpServerProtocol();
 
@@ -30,7 +35,7 @@ public class TcpTempWorker implements Runnable {
             clientSocket.close();
 
         } catch (IOException e) {
-            //
+            logger.log(Level.WARNING, "Worker misbehaves", e);
         }
     }
 }

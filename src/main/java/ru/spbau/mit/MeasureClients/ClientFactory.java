@@ -10,8 +10,9 @@ public class ClientFactory {
             case TCP_PERM_NON_BLOCK:
             case TCP_PERM_ASYNC:
             case TCP_PERM_THREADS:
+                return new TcpClientPerm();
             case TCP_TEMP_SINGLE_THREAD:
-                return new TcpClient();
+                return new TcpClientTemp();
             case UDP_FIXED_THREAD_POOL:
             case UDP_THREAD_PER_REQUEST:
                 return new UdpClient();
