@@ -35,7 +35,7 @@ public class TcpTempWorker implements Runnable {
             clientSocket.close();
 
         } catch (IOException e) {
-            logger.log(Level.WARNING, "Worker misbehaves", e);
+            logger.log(Level.FINER, "Client closed the connection", e);
         }
     }
 }

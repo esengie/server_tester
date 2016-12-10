@@ -58,7 +58,7 @@ public class ArchTester {
         try {
             pool.shutdown();
             while (!pool.awaitTermination(5, TimeUnit.SECONDS)) {
-                System.out.println("lalala");
+                System.out.println("Waiting for clients - 5 sec");
             }
             server.stop();
         } catch (InterruptedException e) {
