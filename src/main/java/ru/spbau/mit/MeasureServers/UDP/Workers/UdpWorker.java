@@ -38,6 +38,6 @@ public class UdpWorker implements Runnable {
         } catch (IOException e) {
             logger.log(Level.FINER, "Udp send error", e);
         }
-        server.clientLogger.logEnd(logID);
+        server.clientLog.logEnd(logID);
     }
 }

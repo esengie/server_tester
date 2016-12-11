@@ -81,6 +81,6 @@ public class ArchTesterRemote {
         server.stop();
         protocol.sendAck(client.getOutputStream());
         protocol.sendResponse(client.getOutputStream(),
-                server.tallyJobs(), server.tallyClients());
+                server.tallySortTimes(), server.tallyRequestTimes());
     }
 }

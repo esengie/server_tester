@@ -20,9 +20,9 @@ public class WriteHandler extends CommonChannelHandler {
                     channel.write(msg.data, msg, this);
                     return;
                 }
-                server.clientLogger.logEnd(msg.logID);
+                server.clientLog.logEnd(msg.logID);
 
-                msg.logID = server.clientID.getAndIncrement();
+                msg.logID = server.clientIdGen.getAndIncrement();
                 msg.state = MessageState.EMPTY;
                 msg.sizeBuf.clear();
                 channel.read(msg.sizeBuf, msg, new ReadHandler(server, channel));

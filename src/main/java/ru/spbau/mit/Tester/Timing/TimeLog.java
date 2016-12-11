@@ -3,7 +3,7 @@ package ru.spbau.mit.Tester.Timing;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerLogger {
+public class TimeLog {
     private volatile Map<Integer, Long> starts = new ConcurrentHashMap<>();
     private volatile Map<Integer, Long> ends = new ConcurrentHashMap<>();
 

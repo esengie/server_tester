@@ -77,7 +77,7 @@ public class TcpNonBlockServer extends MeasureServer {
                     msg.data = ByteBuffer.allocate(msg.sizeBuf.getInt());
                     msg.sizeBuf.reset();
 
-                    clientLogger.logStart(msg.logID);
+                    clientLog.logStart(msg.logID);
                 case READING_DATA:
                     numRead += socketChannel.read(msg.data);
                     if (msg.data.hasRemaining())
@@ -107,11 +107,11 @@ public class TcpNonBlockServer extends MeasureServer {
                 socketChannel.write(msg.data);
                 if (msg.data.hasRemaining())
                     break;
-                clientLogger.logEnd(msg.logID);
+                clientLog.logEnd(msg.logID);
 
                 msg.state = MessageState.EMPTY;
                 msg.sizeBuf.clear();
-                msg.logID = clientID.getAndIncrement();
+                msg.logID = clientIdGen.getAndIncrement();
                 key.interestOps(SelectionKey.OP_READ);
                 selector.wakeup();
         }
@@ -124,7 +124,7 @@ public class TcpNonBlockServer extends MeasureServer {
         socketChannel.configureBlocking(false);
 
         socketChannel.register(selector, SelectionKey.OP_READ,
-                new BufferedMessage(clientID.getAndIncrement()));
+                new BufferedMessage(clientIdGen.getAndIncrement()));
     }
 
     @Override

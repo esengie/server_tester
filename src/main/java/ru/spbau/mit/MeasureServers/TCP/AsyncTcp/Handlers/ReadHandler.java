@@ -36,7 +36,7 @@ public class ReadHandler extends CommonChannelHandler {
                 msg.data = ByteBuffer.allocate(msg.sizeBuf.getInt());
                 msg.sizeBuf.reset();
 
-                server.clientLogger.logStart(msg.logID);
+                server.clientLog.logStart(msg.logID);
             case READING_DATA:
                 if (msg.data.hasRemaining()) {
                     channel.read(msg.data, msg, this);
