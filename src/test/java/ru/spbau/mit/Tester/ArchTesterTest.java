@@ -37,14 +37,14 @@ public class ArchTesterTest {
         runCommon();
     }
 
-    //    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testThreadsPermTCP() throws Exception {
         config(ServerType.TCP_PERM_THREADS);
         runCommon();
     }
 
-    //    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testCachedPoolPermTCP() throws Exception {
         config(ServerType.TCP_PERM_CACHED_POOL);

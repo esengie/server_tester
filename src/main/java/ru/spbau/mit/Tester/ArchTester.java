@@ -67,7 +67,7 @@ public class ArchTester {
             server.stop();
 
             res = RunResults.builder()
-                    .perRequest(server.tallySortTimes())
+                    .perSort(server.tallySortTimes())
                     .perRequest(server.tallyRequestTimes())
                     .perClient(clientTimeLog.tally())
                     .build();
