@@ -1,5 +1,7 @@
 package ru.spbau.mit.Tester;
 
+import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
@@ -12,6 +14,11 @@ public class ArchTesterTest {
     private ArchTester tester;
     private UserConfig config;
     private final int timeout = 10000000;
+
+    @BeforeClass
+    public static void launchLauncherServer() throws InterruptedException {
+        new Thread(new ArchTesterRemote()).start();
+    }
 
     private void config(ServerType type) {
         config = UserConfig.builder()
@@ -37,28 +44,28 @@ public class ArchTesterTest {
         runCommon();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testThreadsPermTCP() throws Exception {
         config(ServerType.TCP_PERM_THREADS);
         runCommon();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testCachedPoolPermTCP() throws Exception {
         config(ServerType.TCP_PERM_CACHED_POOL);
         runCommon();
     }
 
-        @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testNonBlockPermTCP() throws Exception {
         config(ServerType.TCP_PERM_NON_BLOCK);
         runCommon();
     }
 
-        @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testAsyncPermTCP() throws Exception {
         config(ServerType.TCP_PERM_ASYNC);

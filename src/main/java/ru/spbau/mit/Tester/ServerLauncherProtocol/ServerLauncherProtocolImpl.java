@@ -4,6 +4,7 @@ import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.ProtoMessage.Messages;
 import ru.spbau.mit.Tester.Timing.RunResults;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -14,8 +15,8 @@ public class ServerLauncherProtocolImpl implements ServerLauncherProtocol {
         Messages.ServerType.newBuilder()
                 .setServerType(type.toString())
                 .build()
-                .writeTo(output);
-        Messages.Ack.parseFrom(input);
+                .writeDelimitedTo(output);
+        Messages.Ack.parseDelimitedFrom(input);
     }
 
     @Override
@@ -25,7 +26,7 @@ public class ServerLauncherProtocolImpl implements ServerLauncherProtocol {
 
     @Override
     public RunResults getResults(InputStream input) throws IOException {
-        Messages.MeasureResult res = Messages.MeasureResult.parseFrom(input);
+        Messages.MeasureResult res = Messages.MeasureResult.parseDelimitedFrom(input);
         return RunResults.builder()
                 .perSort(res.getSortTime())
                 .perRequest(res.getRequestTime())
@@ -34,7 +35,9 @@ public class ServerLauncherProtocolImpl implements ServerLauncherProtocol {
 
     @Override
     public ServerType readRequest(InputStream input) throws IOException {
-        Messages.ServerType type = Messages.ServerType.parseFrom(input);
+        Messages.ServerType type = Messages.ServerType.parseDelimitedFrom(input);
+        if (type == null)
+            throw new EOFException("Can't have null as serverType");
         return ServerType.valueOf(type.getServerType());
     }
 
@@ -44,13 +47,13 @@ public class ServerLauncherProtocolImpl implements ServerLauncherProtocol {
                 .setRequestTime(timeCompleteRequest)
                 .setSortTime(timeSort)
                 .build()
-                .writeTo(output);
+                .writeDelimitedTo(output);
     }
 
     @Override
     public void sendAck(OutputStream output) throws IOException {
         Messages.Ack.newBuilder()
                 .build()
-                .writeTo(output);
+                .writeDelimitedTo(output);
     }
 }
