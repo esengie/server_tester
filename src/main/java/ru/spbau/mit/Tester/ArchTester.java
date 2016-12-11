@@ -20,9 +20,11 @@ public class ArchTester {
 
     private final UserConfig config;
     private final List<MeasureClient> clients = new ArrayList<>();
+    private final String hostName;
 
-    public ArchTester(UserConfig config) {
+    public ArchTester(UserConfig config, String hostName) {
         this.config = config;
+        this.hostName = hostName;
     }
 
     public void testOnce() throws IOException {
@@ -38,7 +40,7 @@ public class ArchTester {
         for (MeasureClient cl : clients) {
             pool.execute(() -> {
                 try {
-                    cl.connect("localhost");
+                    cl.connect(hostName);
                     List<Integer> send = generateArray(config.getArraySize());
                     for (int i = 0; i < config.getRequestsPerClient(); ++i) {
                         cl.executeRequest(send);
@@ -58,9 +60,7 @@ public class ArchTester {
             pool.shutdown();
             while (!pool.awaitTermination(5, TimeUnit.SECONDS)) {
                 ;
-//                System.out.println("Waiting for clients - 5 sec");
             }
-            server.stop();
             System.out.println(config.getServerType());
             System.out.println("Median per sorting: " + Long.toString(server.tallyJobs()));
             System.out.println("       per client: " + Long.toString(server.tallyClients()));

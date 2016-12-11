@@ -2,6 +2,7 @@ package ru.spbau.mit.Tester.ServerLauncherProtocol;
 
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.ProtoMessage.Messages;
+import ru.spbau.mit.Tester.Timing.RunResults;
 
 import java.io.*;
 
@@ -19,7 +20,7 @@ public interface ServerLauncherProtocol {
     void startServerOnRemote(InputStream input, OutputStream output, ServerType type) throws IOException;
     void stopServerOnRemote(InputStream input, OutputStream output) throws IOException;
 
-    Messages.MeasureResult getResults(InputStream input) throws IOException;
+    RunResults getResults(InputStream input) throws IOException;
 
     ServerType readRequest(InputStream input) throws IOException;
     void sendResponse(OutputStream output, long timePerJob, long timePerClient) throws IOException;

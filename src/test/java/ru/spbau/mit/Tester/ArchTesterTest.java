@@ -21,7 +21,7 @@ public class ArchTesterTest {
                 .requestsPerClient(10)
                 .serverType(type)
                 .build();
-        tester = new ArchTester(config);
+        tester = new ArchTester(config, "localhost");
     }
 
     private void runCommon() throws IOException {

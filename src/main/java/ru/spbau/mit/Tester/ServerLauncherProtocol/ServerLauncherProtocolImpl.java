@@ -2,6 +2,7 @@ package ru.spbau.mit.Tester.ServerLauncherProtocol;
 
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.ProtoMessage.Messages;
+import ru.spbau.mit.Tester.Timing.RunResults;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,8 +24,12 @@ public class ServerLauncherProtocolImpl implements ServerLauncherProtocol {
     }
 
     @Override
-    public Messages.MeasureResult getResults(InputStream input) throws IOException {
-        return Messages.MeasureResult.parseFrom(input);
+    public RunResults getResults(InputStream input) throws IOException {
+        Messages.MeasureResult res = Messages.MeasureResult.parseFrom(input);
+        return RunResults.builder()
+                .perSort(res.getSortTime())
+                .perRequest(res.getRequestTime())
+                .build();
     }
 
     @Override
@@ -34,10 +39,10 @@ public class ServerLauncherProtocolImpl implements ServerLauncherProtocol {
     }
 
     @Override
-    public void sendResponse(OutputStream output, long timePerJob, long timePerClient) throws IOException {
+    public void sendResponse(OutputStream output, long timeSort, long timeCompleteRequest) throws IOException {
         Messages.MeasureResult.newBuilder()
-                .setTimePerClient(timePerClient)
-                .setTimePerJob(timePerJob)
+                .setRequestTime(timeCompleteRequest)
+                .setSortTime(timeSort)
                 .build()
                 .writeTo(output);
     }
