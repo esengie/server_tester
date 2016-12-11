@@ -26,7 +26,7 @@ public class ClientServerFactory {
             case TCP_PERM_NON_BLOCK:
                 return new TcpNonBlockServer();
             default:
-                throw new NotImplementedException();
+                return null;
         }
     }
 
@@ -43,7 +43,7 @@ public class ClientServerFactory {
             case UDP_THREAD_PER_REQUEST:
                 return new UdpClient();
             default:
-                throw new NotImplementedException();
+                return null;
         }
     }
 }
