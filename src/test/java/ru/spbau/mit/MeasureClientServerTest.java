@@ -6,6 +6,7 @@ import ru.spbau.mit.MeasureClients.MeasureClient;
 import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.CreationAndConfigs.ClientServerFactory;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
+import ru.spbau.mit.Tester.Timing.ServerLogger;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,7 +25,7 @@ public class MeasureClientServerTest {
     private MeasureServer server;
 
     private void start(ServerType type) throws IOException, InterruptedException {
-        server = ClientServerFactory.createServer(type);
+        server = ClientServerFactory.createServer(type, new ServerLogger());
         server.start();
         Thread.sleep(100);
         client1 = ClientServerFactory.createClient(type);

@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 public class Job implements Callable<List<Integer>> {
-
     private final ArrayList<Integer> data;
 
-    public Job(List<Integer> data){
+    Job(List<Integer> data){
         this.data = new ArrayList<>(data);
     }
 

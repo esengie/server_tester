@@ -1,6 +1,7 @@
 package ru.spbau.mit.MeasureServers.UDP.Workers;
 
 
+import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.Protocol.ByteProtocol;
 import ru.spbau.mit.MeasureServers.Job;
 
@@ -20,7 +21,7 @@ public class UdpWorker implements Runnable {
 
     @Override
     public void run() {
-        Job job = new Job(protocol.decodeArray(packet.getData()));
+        Job job = MeasureServer.createJob(protocol.decodeArray(packet.getData()));
         byte[] msg = protocol.encodeArray(job.call());
 
         DatagramPacket response = new DatagramPacket(msg, msg.length, packet.getSocketAddress());

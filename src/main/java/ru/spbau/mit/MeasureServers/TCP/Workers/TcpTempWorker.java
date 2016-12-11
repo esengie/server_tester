@@ -1,5 +1,6 @@
 package ru.spbau.mit.MeasureServers.TCP.Workers;
 
+import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.MeasureServers.TCP.TcpServer;
 import ru.spbau.mit.Protocol.ServerSide.ServerProtocol;
 import ru.spbau.mit.Protocol.ServerSide.SyncTcpServerProtocol;
@@ -28,7 +29,7 @@ public class TcpTempWorker implements Runnable {
         try {
             List<Integer> lst = protocol.readRequest(
                     new DataInputStream(clientSocket.getInputStream()));
-            Job job = new Job(lst);
+            Job job = MeasureServer.createJob(lst);
             protocol.sendResponse(
                     new DataOutputStream(clientSocket.getOutputStream()),
                             job.call());

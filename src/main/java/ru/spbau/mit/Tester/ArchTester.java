@@ -4,6 +4,7 @@ import ru.spbau.mit.MeasureClients.MeasureClient;
 import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.CreationAndConfigs.ClientServerFactory;
 import ru.spbau.mit.CreationAndConfigs.UserConfig;
+import ru.spbau.mit.Tester.Timing.ServerLogger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class ArchTester {
 
     public void testOnce() throws IOException {
         ExecutorService pool = Executors.newCachedThreadPool();
-        MeasureServer server = ClientServerFactory.createServer(config.getServerType());
+        MeasureServer server = ClientServerFactory.createServer(config.getServerType(), new ServerLogger());
         server.start();
         clients.clear();
 

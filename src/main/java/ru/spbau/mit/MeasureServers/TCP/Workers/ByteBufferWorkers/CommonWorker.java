@@ -1,6 +1,7 @@
 package ru.spbau.mit.MeasureServers.TCP.Workers.ByteBufferWorkers;
 
 import ru.spbau.mit.MeasureServers.Job;
+import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.BufferedMessage;
 import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.MessageState;
 import ru.spbau.mit.Protocol.ByteProtocol;
@@ -23,7 +24,7 @@ public class CommonWorker implements Runnable {
         buf.put(msg.sizeBuf); buf.put(msg.data);
         List<Integer> lst = protocol.decodeArray(buf.array());
 
-        Job job = new Job(lst);
+        Job job = MeasureServer.createJob(lst);
         msg.data = ByteBuffer.wrap(protocol.encodeArray(job.call()));
         msg.state = MessageState.WAITING_TO_WRITE;
     }
