@@ -7,8 +7,8 @@ message ArrayMessage {
 }
 
 message MeasureResult {
-    required uint64 timePerJob = 1;
-    required uint64 timePerClient = 2;
+    required uint64 sortTime = 1;
+    required uint64 requestTime = 2;
 }
 
 message ServerType {
