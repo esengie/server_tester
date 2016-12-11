@@ -2,8 +2,8 @@ package ru.spbau.mit.MeasureServers;
 
 import ru.spbau.mit.Protocol.ServerSide.ServerProtocol;
 import ru.spbau.mit.Protocol.ServiceState;
-import ru.spbau.mit.Tester.Timing.ServerLogger;
-import ru.spbau.mit.Tester.Timing.Uid;
+import ru.spbau.mit.Tester.Timing.TimeLog;
+import ru.spbau.mit.Tester.Timing.UidGenerator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,10 +14,10 @@ import java.util.concurrent.Callable;
  * Always starts on port 8082
  */
 public abstract class MeasureServer {
-    private final ServerLogger jobLogger = new ServerLogger();
-    private final Uid jobId = new Uid();
-    public final ServerLogger clientLogger = new ServerLogger();
-    public final Uid clientID = new Uid();
+    private final TimeLog jobLog = new TimeLog();
+    private final UidGenerator jobIdGen = new UidGenerator();
+    public final TimeLog clientLog = new TimeLog();
+    public final UidGenerator clientIdGen = new UidGenerator();
 
     private volatile ServiceState serverState = ServiceState.PREINIT;
     protected ServerProtocol protocol;
@@ -45,24 +45,24 @@ public abstract class MeasureServer {
     }
 
     public void defaultLogClient(Runnable r) {
-        int id = clientID.getAndIncrement();
-        clientLogger.logStart(id);
+        int id = clientIdGen.getAndIncrement();
+        clientLog.logStart(id);
         r.run();
-        clientLogger.logEnd(id);
+        clientLog.logEnd(id);
     }
 
-    public long tallyJobs() {
+    public long tallySortTimes() {
         if (!isStopped()) {
-            throw new IllegalStateException("Can't tally jobs if I'm not stopped");
+            throw new IllegalStateException("Can't tallyMedian jobs if I'm not stopped");
         }
-        return jobLogger.tally();
+        return jobLog.tallyMedian();
     }
 
-    public long tallyClients() {
+    public long tallyRequestTimes() {
         if (!isStopped()) {
-            throw new IllegalStateException("Can't tally clients if I'm not stopped");
+            throw new IllegalStateException("Can't tallyMedian clients if I'm not stopped");
         }
-        return clientLogger.tally();
+        return clientLog.tallyMedian();
     }
 
     protected boolean isStopped() {
@@ -78,10 +78,10 @@ public abstract class MeasureServer {
 
         @Override
         public List<Integer> call() {
-            int uid = jobId.getAndIncrement();
-            jobLogger.logStart(uid);
+            int uid = jobIdGen.getAndIncrement();
+            jobLog.logStart(uid);
             List<Integer> res = actualWork();
-            jobLogger.logEnd(uid);
+            jobLog.logEnd(uid);
             return res;
         }
 

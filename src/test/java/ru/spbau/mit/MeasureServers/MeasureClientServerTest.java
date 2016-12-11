@@ -1,4 +1,4 @@
-package ru.spbau.mit;
+package ru.spbau.mit.MeasureServers;
 
 import org.junit.After;
 import org.junit.Test;

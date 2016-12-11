@@ -41,8 +41,8 @@ public class UdpServer extends MeasureServer {
                     byte[] buffer = new byte[ByteProtocol.MAX_PACKET];
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     serverSocket.receive(packet);
-                    int id = clientID.getAndIncrement();
-                    clientLogger.logStart(id);
+                    int id = clientIdGen.getAndIncrement();
+                    clientLog.logStart(id);
                     submit(packet, id);
                 } catch (IOException e) {
                     if (isStopped()) {
