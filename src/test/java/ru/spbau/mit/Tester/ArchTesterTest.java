@@ -2,8 +2,8 @@ package ru.spbau.mit.Tester;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import ru.spbau.mit.MeasureServers.ServerType;
-import ru.spbau.mit.UserConfig;
+import ru.spbau.mit.CreationAndConfigs.ServerType;
+import ru.spbau.mit.CreationAndConfigs.UserConfig;
 
 import java.io.IOException;
 
@@ -14,7 +14,13 @@ public class ArchTesterTest {
     private final int timeout = 10000000;
 
     private void config(ServerType type) {
-        config = new UserConfig(10, 2, 100, 1, type);
+        config = UserConfig.builder()
+                .arraySize(10)
+                .clientsSize(2)
+                .nextReqDelta(100)
+                .requestsPerClient(1)
+                .serverType(type)
+                .build();
         tester = new ArchTester(config);
     }
 
@@ -31,14 +37,14 @@ public class ArchTesterTest {
         runCommon();
     }
 
-//    @Ignore
+    //    @Ignore
     @Test(timeout = timeout)
     public void testThreadsPermTCP() throws Exception {
         config(ServerType.TCP_PERM_THREADS);
         runCommon();
     }
 
-//    @Ignore
+    //    @Ignore
     @Test(timeout = timeout)
     public void testCachedPoolPermTCP() throws Exception {
         config(ServerType.TCP_PERM_CACHED_POOL);

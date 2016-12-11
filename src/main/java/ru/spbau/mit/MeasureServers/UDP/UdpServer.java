@@ -2,7 +2,7 @@ package ru.spbau.mit.MeasureServers.UDP;
 
 import ru.spbau.mit.MeasureServers.UDP.Workers.UdpWorker;
 import ru.spbau.mit.Protocol.ProtocolConstants;
-import ru.spbau.mit.MeasureServers.ServerType;
+import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.Protocol.ByteProtocol;
 

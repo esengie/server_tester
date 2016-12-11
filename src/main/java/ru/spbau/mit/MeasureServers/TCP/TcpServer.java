@@ -3,7 +3,7 @@ package ru.spbau.mit.MeasureServers.TCP;
 import ru.spbau.mit.MeasureServers.TCP.Workers.TcpPermWorker;
 import ru.spbau.mit.MeasureServers.TCP.Workers.TcpTempWorker;
 import ru.spbau.mit.Protocol.ProtocolConstants;
-import ru.spbau.mit.MeasureServers.ServerType;
+import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.MeasureServers.MeasureServer;
 
 import java.io.IOException;
@@ -12,7 +12,6 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;

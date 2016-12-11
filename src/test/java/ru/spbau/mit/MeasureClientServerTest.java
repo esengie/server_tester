@@ -2,11 +2,10 @@ package ru.spbau.mit;
 
 import org.junit.After;
 import org.junit.Test;
-import ru.spbau.mit.MeasureClients.ClientFactory;
 import ru.spbau.mit.MeasureClients.MeasureClient;
 import ru.spbau.mit.MeasureServers.MeasureServer;
-import ru.spbau.mit.MeasureServers.ServerFactory;
-import ru.spbau.mit.MeasureServers.ServerType;
+import ru.spbau.mit.CreationAndConfigs.ClientServerFactory;
+import ru.spbau.mit.CreationAndConfigs.ServerType;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -25,12 +24,12 @@ public class MeasureClientServerTest {
     private MeasureServer server;
 
     private void start(ServerType type) throws IOException, InterruptedException {
-        server = ServerFactory.createServer(type);
+        server = ClientServerFactory.createServer(type);
         server.start();
         Thread.sleep(100);
-        client1 = ClientFactory.createClient(type);
+        client1 = ClientServerFactory.createClient(type);
         client1.connect("localhost");
-        client2 = ClientFactory.createClient(type);
+        client2 = ClientServerFactory.createClient(type);
         client2.connect("localhost");
     }
 

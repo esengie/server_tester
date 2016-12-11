@@ -1,10 +1,9 @@
 package ru.spbau.mit.Tester;
 
-import ru.spbau.mit.MeasureClients.ClientFactory;
 import ru.spbau.mit.MeasureClients.MeasureClient;
 import ru.spbau.mit.MeasureServers.MeasureServer;
-import ru.spbau.mit.MeasureServers.ServerFactory;
-import ru.spbau.mit.UserConfig;
+import ru.spbau.mit.CreationAndConfigs.ClientServerFactory;
+import ru.spbau.mit.CreationAndConfigs.UserConfig;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,12 +27,12 @@ public class ArchTester {
 
     public void testOnce() throws IOException {
         ExecutorService pool = Executors.newCachedThreadPool();
-        MeasureServer server = ServerFactory.createServer(config.getServerType());
+        MeasureServer server = ClientServerFactory.createServer(config.getServerType());
         server.start();
         clients.clear();
 
         for (int i = 0; i < config.getClientsSize(); ++i) {
-            clients.add(ClientFactory.createClient(config.getServerType()));
+            clients.add(ClientServerFactory.createClient(config.getServerType()));
         }
 
         for (MeasureClient cl : clients) {
