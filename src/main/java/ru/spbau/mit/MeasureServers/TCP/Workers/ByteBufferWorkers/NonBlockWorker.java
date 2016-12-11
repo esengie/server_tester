@@ -18,8 +18,8 @@ public class NonBlockWorker extends CommonWorker implements Runnable {
 
     @Override
     public void run() {
-        key.interestOps(SelectionKey.OP_WRITE);
         super.run();
+        key.interestOps(SelectionKey.OP_WRITE);
         selector.wakeup();
     }
 }

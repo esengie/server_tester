@@ -16,8 +16,8 @@ import java.util.concurrent.Callable;
 public abstract class MeasureServer {
     private final ServerLogger jobLogger = new ServerLogger();
     private final Uid jobId = new Uid();
-    protected final ServerLogger clientLogger = new ServerLogger();
-    protected final Uid clientID = new Uid();
+    public final ServerLogger clientLogger = new ServerLogger();
+    public final Uid clientID = new Uid();
 
     private volatile ServiceState serverState = ServiceState.PREINIT;
     protected ServerProtocol protocol;
@@ -42,6 +42,13 @@ public abstract class MeasureServer {
 
     public Job createJob(List<Integer> data) {
         return new Job(data);
+    }
+
+    public void defaultLogClient(Runnable r) {
+        int id = clientID.getAndIncrement();
+        clientLogger.logStart(id);
+        r.run();
+        clientLogger.logEnd(id);
     }
 
     public long tallyJobs() {

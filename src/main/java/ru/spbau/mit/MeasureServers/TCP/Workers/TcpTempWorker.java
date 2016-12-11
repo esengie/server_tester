@@ -20,20 +20,24 @@ public class TcpTempWorker implements Runnable {
     private final Socket clientSocket;
     private final ServerProtocol protocol = new SyncTcpServerProtocol();
 
-    public TcpTempWorker(MeasureServer server, Socket clientSocket){
+    public TcpTempWorker(MeasureServer server, Socket clientSocket) {
         this.server = server;
         this.clientSocket = clientSocket;
     }
 
     @Override
     public void run() {
+        server.defaultLogClient(this::realRun);
+    }
+
+    private void realRun() {
         try {
             List<Integer> lst = protocol.readRequest(
                     new DataInputStream(clientSocket.getInputStream()));
             MeasureServer.Job job = server.createJob(lst);
             protocol.sendResponse(
                     new DataOutputStream(clientSocket.getOutputStream()),
-                            job.call());
+                    job.call());
             clientSocket.close();
 
         } catch (IOException e) {

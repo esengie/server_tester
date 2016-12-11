@@ -1,6 +1,6 @@
 package ru.spbau.mit.ProtoMessage;
 
-option java_outer_classname="Messages";
+option java_outer_classname = "Messages";
 
 message ArrayMessage {
     repeated sint32 elem = 1;

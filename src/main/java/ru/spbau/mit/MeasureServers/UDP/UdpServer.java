@@ -1,10 +1,10 @@
 package ru.spbau.mit.MeasureServers.UDP;
 
-import ru.spbau.mit.MeasureServers.UDP.Workers.UdpWorker;
-import ru.spbau.mit.Protocol.ProtocolConstants;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.MeasureServers.MeasureServer;
+import ru.spbau.mit.MeasureServers.UDP.Workers.UdpWorker;
 import ru.spbau.mit.Protocol.ByteProtocol;
+import ru.spbau.mit.Protocol.ProtocolConstants;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -23,7 +23,7 @@ public class UdpServer extends MeasureServer {
     private ServerType type;
 
     public UdpServer(ServerType type) {
-        switch (type){
+        switch (type) {
             case UDP_THREAD_PER_REQUEST:
             case UDP_FIXED_THREAD_POOL:
                 this.type = type;
@@ -41,7 +41,9 @@ public class UdpServer extends MeasureServer {
                     byte[] buffer = new byte[ByteProtocol.MAX_PACKET];
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     serverSocket.receive(packet);
-                    submit(packet);
+                    int id = clientID.getAndIncrement();
+                    clientLogger.logStart(id);
+                    submit(packet, id);
                 } catch (IOException e) {
                     if (isStopped()) {
                         break;
@@ -52,14 +54,14 @@ public class UdpServer extends MeasureServer {
         }
     }
 
-    private void submit(DatagramPacket packet) {
-        switch (type){
+    private void submit(DatagramPacket packet, int id) {
+        switch (type) {
             case UDP_THREAD_PER_REQUEST:
-                Thread t = new Thread(new UdpWorker(this, serverSocket, packet));
+                Thread t = new Thread(new UdpWorker(this, serverSocket, packet, id));
                 t.start();
                 break;
             case UDP_FIXED_THREAD_POOL:
-                threadPool.execute(new UdpWorker(this, serverSocket, packet));
+                threadPool.execute(new UdpWorker(this, serverSocket, packet, id));
                 break;
         }
     }
@@ -73,6 +75,11 @@ public class UdpServer extends MeasureServer {
     @Override
     public void stopHelper() throws IOException {
         serverSocket.close();
+        try {
+            serverThread.join();
+        } catch (InterruptedException e) {
+            //
+        }
     }
 
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TcpClientProtocol implements ClientProtocol {
 
-    public static ArrayMessage formProtoMessage(List<Integer> data){
+    public static ArrayMessage formProtoMessage(List<Integer> data) {
         return ArrayMessage.newBuilder()
                 .addAllElem(data)
                 .build();
@@ -19,7 +19,7 @@ public class TcpClientProtocol implements ClientProtocol {
         int size = input.readInt();
         byte[] msg = new byte[size];
         int cnt = 0;
-        while (cnt != size){
+        while (cnt != size) {
             msg[cnt] = input.readByte();
             ++cnt;
         }

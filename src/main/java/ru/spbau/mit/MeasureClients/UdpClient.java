@@ -1,7 +1,7 @@
 package ru.spbau.mit.MeasureClients;
 
-import ru.spbau.mit.Protocol.ProtocolConstants;
 import ru.spbau.mit.Protocol.ByteProtocol;
+import ru.spbau.mit.Protocol.ProtocolConstants;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

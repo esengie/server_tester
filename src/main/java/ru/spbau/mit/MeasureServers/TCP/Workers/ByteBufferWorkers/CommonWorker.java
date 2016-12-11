@@ -12,7 +12,7 @@ public class CommonWorker implements Runnable {
     protected final MeasureServer server;
     protected final BufferedMessage msg;
 
-    protected CommonWorker(MeasureServer server, BufferedMessage msg){
+    protected CommonWorker(MeasureServer server, BufferedMessage msg) {
         this.server = server;
         this.msg = msg;
     }
@@ -22,7 +22,8 @@ public class CommonWorker implements Runnable {
         ByteProtocol protocol = new ByteProtocol();
 
         ByteBuffer buf = ByteBuffer.allocate(msg.sizeBuf.limit() + msg.data.limit());
-        buf.put(msg.sizeBuf); buf.put(msg.data);
+        buf.put(msg.sizeBuf);
+        buf.put(msg.data);
         List<Integer> lst = protocol.decodeArray(buf.array());
 
         MeasureServer.Job job = server.createJob(lst);

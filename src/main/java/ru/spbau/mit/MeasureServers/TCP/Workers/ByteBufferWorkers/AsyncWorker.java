@@ -9,7 +9,8 @@ import java.nio.channels.AsynchronousSocketChannel;
 public class AsyncWorker extends CommonWorker implements Runnable {
     private final AsynchronousSocketChannel channel;
 
-    public AsyncWorker(MeasureServer server, AsynchronousSocketChannel channel, BufferedMessage msg) {
+    public AsyncWorker(MeasureServer server, AsynchronousSocketChannel channel,
+                       BufferedMessage msg) {
         super(server, msg);
         this.channel = channel;
     }

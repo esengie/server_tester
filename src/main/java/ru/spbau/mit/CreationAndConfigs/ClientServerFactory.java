@@ -9,7 +9,6 @@ import ru.spbau.mit.MeasureServers.TCP.AsyncTcp.TcpAsyncServer;
 import ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp.TcpNonBlockServer;
 import ru.spbau.mit.MeasureServers.TCP.TcpServer;
 import ru.spbau.mit.MeasureServers.UDP.UdpServer;
-import ru.spbau.mit.Tester.Timing.ServerLogger;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class ClientServerFactory {
@@ -30,8 +29,9 @@ public class ClientServerFactory {
                 throw new NotImplementedException();
         }
     }
-    public static MeasureClient createClient(ServerType type){
-        switch (type){
+
+    public static MeasureClient createClient(ServerType type) {
+        switch (type) {
             case TCP_PERM_CACHED_POOL:
             case TCP_PERM_NON_BLOCK:
             case TCP_PERM_ASYNC:

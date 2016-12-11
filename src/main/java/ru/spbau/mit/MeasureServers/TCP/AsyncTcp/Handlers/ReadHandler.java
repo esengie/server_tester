@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 
 public class ReadHandler extends CommonChannelHandler {
     static ExecutorService pool;
+    private int logID;
 
     public ReadHandler(MeasureServer server, AsynchronousSocketChannel channel) {
         super(server, channel);
@@ -25,7 +26,7 @@ public class ReadHandler extends CommonChannelHandler {
 
         switch (msg.state) {
             case EMPTY:
-                if (msg.sizeBuf.hasRemaining()){
+                if (msg.sizeBuf.hasRemaining()) {
                     channel.read(msg.sizeBuf, msg, this);
                     return;
                 }
@@ -34,8 +35,10 @@ public class ReadHandler extends CommonChannelHandler {
                 msg.sizeBuf.mark();
                 msg.data = ByteBuffer.allocate(msg.sizeBuf.getInt());
                 msg.sizeBuf.reset();
+
+                server.clientLogger.logStart(msg.logID);
             case READING_DATA:
-                if (msg.data.hasRemaining()){
+                if (msg.data.hasRemaining()) {
                     channel.read(msg.data, msg, this);
                     return;
                 }
@@ -48,6 +51,7 @@ public class ReadHandler extends CommonChannelHandler {
     public static void startupPool() {
         pool = Executors.newFixedThreadPool(10);
     }
+
     public static void shutdownPool() {
         pool.shutdownNow();
     }

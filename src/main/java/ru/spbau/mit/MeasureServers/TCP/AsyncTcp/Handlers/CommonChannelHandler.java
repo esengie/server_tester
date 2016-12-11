@@ -25,7 +25,7 @@ public abstract class CommonChannelHandler implements CompletionHandler<Integer,
         handleClose();
     }
 
-    protected void handleClose(){
+    protected void handleClose() {
         try {
             channel.close();
         } catch (IOException e) {

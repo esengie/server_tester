@@ -20,25 +20,29 @@ public class TcpPermWorker implements Runnable {
     private final Socket clientSocket;
     private final ServerProtocol protocol = new SyncTcpServerProtocol();
 
-    public TcpPermWorker(MeasureServer server, Socket clientSocket){
+    public TcpPermWorker(MeasureServer server, Socket clientSocket) {
         this.server = server;
         this.clientSocket = clientSocket;
     }
 
     @Override
     public void run() {
-        try {
-            while (!Thread.interrupted()) {
-                List<Integer> lst = protocol.readRequest(
-                        new DataInputStream(clientSocket.getInputStream()));
-                MeasureServer.Job job = server.createJob(lst);
-                protocol.sendResponse(
-                        new DataOutputStream(clientSocket.getOutputStream()),
-                        job.call());
-            }
+        while (!Thread.interrupted()) {
+            server.defaultLogClient(this::runOnce);
+        }
+    }
 
+    private void runOnce() {
+        try {
+            List<Integer> lst = protocol.readRequest(
+                    new DataInputStream(clientSocket.getInputStream()));
+            MeasureServer.Job job = server.createJob(lst);
+            protocol.sendResponse(
+                    new DataOutputStream(clientSocket.getOutputStream()),
+                    job.call());
         } catch (IOException e) {
             logger.log(Level.FINER, "Client closed the connection", e);
         }
     }
 }
+
