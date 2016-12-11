@@ -55,11 +55,11 @@ public class UdpServer extends MeasureServer {
     private void submit(DatagramPacket packet) {
         switch (type){
             case UDP_THREAD_PER_REQUEST:
-                Thread t = new Thread(new UdpWorker(serverSocket, packet));
+                Thread t = new Thread(new UdpWorker(this, serverSocket, packet));
                 t.start();
                 break;
             case UDP_FIXED_THREAD_POOL:
-                threadPool.execute(new UdpWorker(serverSocket, packet));
+                threadPool.execute(new UdpWorker(this, serverSocket, packet));
                 break;
         }
     }

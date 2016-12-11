@@ -13,7 +13,7 @@ import ru.spbau.mit.Tester.Timing.ServerLogger;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class ClientServerFactory {
-    public static MeasureServer createServer(ServerType type, ServerLogger logger) {
+    public static MeasureServer createServer(ServerType type) {
         switch (type) {
             case TCP_PERM_CACHED_POOL:
             case TCP_PERM_THREADS:

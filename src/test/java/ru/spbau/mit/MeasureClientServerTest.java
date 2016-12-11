@@ -25,7 +25,7 @@ public class MeasureClientServerTest {
     private MeasureServer server;
 
     private void start(ServerType type) throws IOException, InterruptedException {
-        server = ClientServerFactory.createServer(type, new ServerLogger());
+        server = ClientServerFactory.createServer(type);
         server.start();
         Thread.sleep(100);
         client1 = ClientServerFactory.createClient(type);

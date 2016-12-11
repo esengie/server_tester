@@ -82,7 +82,7 @@ public class TcpNonBlockServer extends MeasureServer {
                         break;
                     msg.state = MessageState.PROCESSING;
                     msg.data.flip();
-                    pool.execute(new NonBlockWorker(selector, key, msg));
+                    pool.execute(new NonBlockWorker(this, selector, key, msg));
             }
         } catch (IOException e) {
             key.cancel();

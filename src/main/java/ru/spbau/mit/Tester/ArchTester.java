@@ -28,7 +28,7 @@ public class ArchTester {
 
     public void testOnce() throws IOException {
         ExecutorService pool = Executors.newCachedThreadPool();
-        MeasureServer server = ClientServerFactory.createServer(config.getServerType(), new ServerLogger());
+        MeasureServer server = ClientServerFactory.createServer(config.getServerType());
         server.start();
         clients.clear();
 

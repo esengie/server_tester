@@ -4,7 +4,6 @@ import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.MeasureServers.TCP.TcpServer;
 import ru.spbau.mit.Protocol.ServerSide.ServerProtocol;
 import ru.spbau.mit.Protocol.ServerSide.SyncTcpServerProtocol;
-import ru.spbau.mit.MeasureServers.Job;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,10 +16,12 @@ import java.util.logging.Logger;
 public class TcpPermWorker implements Runnable {
     private static final Logger logger = Logger.getLogger(TcpServer.class.getName());
 
-    private Socket clientSocket;
-    private ServerProtocol protocol = new SyncTcpServerProtocol();
+    private final MeasureServer server;
+    private final Socket clientSocket;
+    private final ServerProtocol protocol = new SyncTcpServerProtocol();
 
-    public TcpPermWorker(Socket clientSocket){
+    public TcpPermWorker(MeasureServer server, Socket clientSocket){
+        this.server = server;
         this.clientSocket = clientSocket;
     }
 
@@ -30,7 +31,7 @@ public class TcpPermWorker implements Runnable {
             while (!Thread.interrupted()) {
                 List<Integer> lst = protocol.readRequest(
                         new DataInputStream(clientSocket.getInputStream()));
-                Job job = MeasureServer.createJob(lst);
+                MeasureServer.Job job = server.createJob(lst);
                 protocol.sendResponse(
                         new DataOutputStream(clientSocket.getOutputStream()),
                         job.call());

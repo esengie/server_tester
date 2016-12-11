@@ -28,7 +28,7 @@ public class TcpAsyncServer extends MeasureServer {
             @Override
             public void completed(AsynchronousSocketChannel channel, BufferedMessage msg) {
                 serverChannel.accept(new BufferedMessage(), this);
-                channel.read(msg.sizeBuf, msg, new ReadHandler(channel));
+                channel.read(msg.sizeBuf, msg, new ReadHandler(TcpAsyncServer.this, channel));
             }
 
             @Override

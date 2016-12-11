@@ -1,5 +1,6 @@
 package ru.spbau.mit.MeasureServers.TCP.AsyncTcp.Handlers;
 
+import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.BufferedMessage;
 import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.MessageState;
 import ru.spbau.mit.MeasureServers.TCP.Workers.ByteBufferWorkers.AsyncWorker;
@@ -12,8 +13,8 @@ import java.util.concurrent.Executors;
 public class ReadHandler extends CommonChannelHandler {
     static ExecutorService pool;
 
-    public ReadHandler(AsynchronousSocketChannel channel) {
-        super(channel);
+    public ReadHandler(MeasureServer server, AsynchronousSocketChannel channel) {
+        super(server, channel);
     }
 
     @Override
@@ -40,7 +41,7 @@ public class ReadHandler extends CommonChannelHandler {
                 }
                 msg.state = MessageState.PROCESSING;
                 msg.data.flip();
-                pool.execute(new AsyncWorker(channel, msg));
+                pool.execute(new AsyncWorker(server, channel, msg));
         }
     }
 

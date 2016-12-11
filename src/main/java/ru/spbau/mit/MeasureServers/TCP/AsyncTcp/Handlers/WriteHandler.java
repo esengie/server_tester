@@ -1,14 +1,15 @@
 package ru.spbau.mit.MeasureServers.TCP.AsyncTcp.Handlers;
 
 
+import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.BufferedMessage;
 import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.MessageState;
 
 import java.nio.channels.AsynchronousSocketChannel;
 
 public class WriteHandler extends CommonChannelHandler {
-    public WriteHandler(AsynchronousSocketChannel channel) {
-        super(channel);
+    public WriteHandler(MeasureServer server, AsynchronousSocketChannel channel) {
+        super(server, channel);
     }
 
     @Override
@@ -21,7 +22,7 @@ public class WriteHandler extends CommonChannelHandler {
                 }
                 msg.state = MessageState.EMPTY;
                 msg.sizeBuf.clear();
-                channel.read(msg.sizeBuf, msg, new ReadHandler(channel));
+                channel.read(msg.sizeBuf, msg, new ReadHandler(server, channel));
         }
     }
 }
