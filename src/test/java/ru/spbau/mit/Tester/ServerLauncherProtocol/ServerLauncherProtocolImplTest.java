@@ -1,26 +1,20 @@
-package ru.spbau.mit.Tester.Protocol;
+package ru.spbau.mit.Tester.ServerLauncherProtocol;
 
 import org.junit.Before;
 import org.junit.Test;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.ProtoMessage.Messages;
-import ru.spbau.mit.Protocol.ClientSide.ClientProtocol;
-import ru.spbau.mit.Protocol.ClientSide.TcpClientProtocol;
-import ru.spbau.mit.Protocol.ServerSide.ServerProtocol;
-import ru.spbau.mit.Protocol.ServerSide.SyncTcpServerProtocol;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class MeasureProtocolImplTest {
+public class ServerLauncherProtocolImplTest {
 
     private ByteArrayOutputStream clientOutContent;
     private ByteArrayOutputStream servOutContent;
 
-    private MeasureProtocolImpl protocol = new MeasureProtocolImpl();
+    private ServerLauncherProtocolImpl protocol = new ServerLauncherProtocolImpl();
 
     @Before
     public void setUpStreams() throws IOException {

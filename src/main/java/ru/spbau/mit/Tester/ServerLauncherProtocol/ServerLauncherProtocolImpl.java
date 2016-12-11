@@ -1,4 +1,4 @@
-package ru.spbau.mit.Tester.Protocol;
+package ru.spbau.mit.Tester.ServerLauncherProtocol;
 
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.ProtoMessage.Messages;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class MeasureProtocolImpl implements MeasureProtocol {
+public class ServerLauncherProtocolImpl implements ServerLauncherProtocol {
     @Override
     public void startServerOnRemote(InputStream input, OutputStream output, ServerType type) throws IOException {
         Messages.ServerType.newBuilder()
