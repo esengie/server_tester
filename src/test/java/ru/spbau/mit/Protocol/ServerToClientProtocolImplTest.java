@@ -19,7 +19,6 @@ public class ServerToClientProtocolImplTest {
 
     ClientProtocol clientP = new TcpClientProtocol();
     ServerProtocol serverP = new SyncTcpServerProtocol();
-    ;
 
     @Before
     public void setUpStreams() throws IOException {

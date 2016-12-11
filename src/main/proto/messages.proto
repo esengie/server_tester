@@ -5,3 +5,14 @@ option java_outer_classname = "Messages";
 message ArrayMessage {
     repeated sint32 elem = 1;
 }
+
+message MeasureResult {
+    required uint64 timePerJob = 1;
+    required uint64 timePerClient = 2;
+}
+
+message ServerType {
+    required string serverType = 1;
+}
+
+message Ack {}
