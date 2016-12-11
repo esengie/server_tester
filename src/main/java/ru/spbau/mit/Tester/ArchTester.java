@@ -61,6 +61,7 @@ public class ArchTester {
             while (!pool.awaitTermination(5, TimeUnit.SECONDS)) {
                 ;
             }
+            server.stop();
             System.out.println(config.getServerType());
             System.out.println("Median per sorting: " + Long.toString(server.tallyJobs()));
             System.out.println("       per client: " + Long.toString(server.tallyClients()));
