@@ -36,6 +36,6 @@ public class ServerLogger {
             }
         }
 
-        return total/cnt;
+        return total;
     }
 }

@@ -61,6 +61,8 @@ public class ArchTester {
                 System.out.println("Waiting for clients - 5 sec");
             }
             server.stop();
+            System.out.println("Avg per sorting: " + Long.toString(server.tallyJobs()));
+//            System.out.println("Avg per client: " + Long.toString(server.tallyClients()));
         } catch (InterruptedException e) {
             //
         }

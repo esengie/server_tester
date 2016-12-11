@@ -18,7 +18,7 @@ public class ArchTesterTest {
                 .arraySize(10)
                 .clientsSize(2)
                 .nextReqDelta(100)
-                .requestsPerClient(1)
+                .requestsPerClient(10)
                 .serverType(type)
                 .build();
         tester = new ArchTester(config);
