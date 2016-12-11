@@ -16,7 +16,7 @@ public class ArchTesterTest {
     private void config(ServerType type) {
         config = UserConfig.builder()
                 .arraySize(10)
-                .clientsSize(400)
+                .clientsSize(250)
                 .nextReqDelta(20)
                 .requestsPerClient(10)
                 .serverType(type)
@@ -30,49 +30,49 @@ public class ArchTesterTest {
         tester.testOnce();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testTempTCP() throws Exception {
         config(ServerType.TCP_TEMP_SINGLE_THREAD);
         runCommon();
     }
 
-//    @Ignore
+    @Ignore
     @Test(timeout = timeout)
     public void testThreadsPermTCP() throws Exception {
         config(ServerType.TCP_PERM_THREADS);
         runCommon();
     }
 
-//    @Ignore
+    @Ignore
     @Test(timeout = timeout)
     public void testCachedPoolPermTCP() throws Exception {
         config(ServerType.TCP_PERM_CACHED_POOL);
         runCommon();
     }
 
-    //    @Ignore
+        @Ignore
     @Test(timeout = timeout)
     public void testNonBlockPermTCP() throws Exception {
         config(ServerType.TCP_PERM_NON_BLOCK);
         runCommon();
     }
 
-    //    @Ignore
+        @Ignore
     @Test(timeout = timeout)
     public void testAsyncPermTCP() throws Exception {
         config(ServerType.TCP_PERM_ASYNC);
         runCommon();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testFixedPoolUDP() throws Exception {
         config(ServerType.UDP_FIXED_THREAD_POOL);
         runCommon();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testThreadsUDP() throws Exception {
         config(ServerType.UDP_THREAD_PER_REQUEST);

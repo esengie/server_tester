@@ -53,16 +53,16 @@ public abstract class MeasureServer {
 
     public long tallySortTimes() {
         if (!isStopped()) {
-            throw new IllegalStateException("Can't tally jobs if I'm not stopped");
+            throw new IllegalStateException("Can't tallyMedian jobs if I'm not stopped");
         }
-        return jobLog.tally();
+        return jobLog.tallyMedian();
     }
 
     public long tallyRequestTimes() {
         if (!isStopped()) {
-            throw new IllegalStateException("Can't tally clients if I'm not stopped");
+            throw new IllegalStateException("Can't tallyMedian clients if I'm not stopped");
         }
-        return clientLog.tally();
+        return clientLog.tallyMedian();
     }
 
     protected boolean isStopped() {

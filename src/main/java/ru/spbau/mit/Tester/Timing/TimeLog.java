@@ -19,7 +19,15 @@ public class TimeLog {
         return System.nanoTime();
     }
 
-    public synchronized long tally() {
+    public long tallyMedian() {
+        return tally(false);
+    }
+
+    public long tallyMean() {
+        return tally(true);
+    }
+
+    private synchronized long tally(boolean tallyMean) {
         Map<Integer, Long> startsCopy = new HashMap<>(starts);
         Map<Integer, Long> endsCopy = new HashMap<>(ends);
 
@@ -39,7 +47,10 @@ public class TimeLog {
         if (cnt == 0)
             return -1;
         Collections.sort(results);
-        return results.get((results.size()) / 2);
-//        return total / cnt;
+
+        if (tallyMean)
+            return total / cnt;
+        else
+            return results.get((results.size()) / 2);
     }
 }
