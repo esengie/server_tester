@@ -1,10 +1,10 @@
 package ru.spbau.mit.MeasureServers.TCP;
 
+import ru.spbau.mit.CreationAndConfigs.ServerType;
+import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.MeasureServers.TCP.Workers.TcpPermWorker;
 import ru.spbau.mit.MeasureServers.TCP.Workers.TcpTempWorker;
 import ru.spbau.mit.Protocol.ProtocolConstants;
-import ru.spbau.mit.CreationAndConfigs.ServerType;
-import ru.spbau.mit.MeasureServers.MeasureServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -30,7 +30,7 @@ public class TcpServer extends MeasureServer {
     private ServerType type;
 
     public TcpServer(ServerType type) {
-        switch (type){
+        switch (type) {
             case TCP_PERM_THREADS:
             case TCP_PERM_CACHED_POOL:
             case TCP_TEMP_SINGLE_THREAD:
@@ -61,17 +61,17 @@ public class TcpServer extends MeasureServer {
     }
 
     private void submit(Socket clientSocket) {
-        switch (type){
+        switch (type) {
             case TCP_PERM_THREADS:
-                Thread t = new Thread(new TcpPermWorker(clientSocket));
+                Thread t = new Thread(new TcpPermWorker(this, clientSocket));
                 t.start();
                 threads.add(t);
                 break;
             case TCP_PERM_CACHED_POOL:
-                threadPool.execute(new TcpPermWorker(clientSocket));
+                threadPool.execute(new TcpPermWorker(this, clientSocket));
                 break;
             case TCP_TEMP_SINGLE_THREAD:
-                new TcpTempWorker(clientSocket).run();
+                new TcpTempWorker(this, clientSocket).run();
         }
     }
 

@@ -29,8 +29,9 @@ public class ClientServerFactory {
                 throw new NotImplementedException();
         }
     }
-    public static MeasureClient createClient(ServerType type){
-        switch (type){
+
+    public static MeasureClient createClient(ServerType type) {
+        switch (type) {
             case TCP_PERM_CACHED_POOL:
             case TCP_PERM_NON_BLOCK:
             case TCP_PERM_ASYNC:

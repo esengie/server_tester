@@ -14,7 +14,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.*;
+import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,7 +31,7 @@ public class TcpNonBlockServer extends MeasureServer {
             while (serverChannel.isOpen() && !isStopped()) {
                 try {
                     int ready = selector.select(50);
-                    if(ready == 0) continue;
+                    if (ready == 0) continue;
 
                     Iterator<SelectionKey> selectedKeys = selector.selectedKeys().iterator();
                     while (selectedKeys.hasNext()) {
@@ -65,7 +65,7 @@ public class TcpNonBlockServer extends MeasureServer {
 
         int numRead = 0;
         try {
-            switch(msg.state){
+            switch (msg.state) {
                 case EMPTY:
                     numRead = socketChannel.read(msg.sizeBuf);
                     if (msg.sizeBuf.hasRemaining())
@@ -76,13 +76,15 @@ public class TcpNonBlockServer extends MeasureServer {
                     msg.sizeBuf.mark();
                     msg.data = ByteBuffer.allocate(msg.sizeBuf.getInt());
                     msg.sizeBuf.reset();
+
+                    clientLogger.logStart(msg.logID);
                 case READING_DATA:
                     numRead += socketChannel.read(msg.data);
                     if (msg.data.hasRemaining())
                         break;
                     msg.state = MessageState.PROCESSING;
                     msg.data.flip();
-                    pool.execute(new NonBlockWorker(selector, key, msg));
+                    pool.execute(new NonBlockWorker(this, selector, key, msg));
             }
         } catch (IOException e) {
             key.cancel();
@@ -100,13 +102,16 @@ public class TcpNonBlockServer extends MeasureServer {
         SocketChannel socketChannel = (SocketChannel) key.channel();
         BufferedMessage msg = (BufferedMessage) key.attachment();
 
-        switch (msg.state){
+        switch (msg.state) {
             case WAITING_TO_WRITE:
                 socketChannel.write(msg.data);
                 if (msg.data.hasRemaining())
                     break;
+                clientLogger.logEnd(msg.logID);
+
                 msg.state = MessageState.EMPTY;
                 msg.sizeBuf.clear();
+                msg.logID = clientID.getAndIncrement();
                 key.interestOps(SelectionKey.OP_READ);
                 selector.wakeup();
         }
@@ -118,7 +123,8 @@ public class TcpNonBlockServer extends MeasureServer {
         SocketChannel socketChannel = serverSocketChannel.accept();
         socketChannel.configureBlocking(false);
 
-        socketChannel.register(selector, SelectionKey.OP_READ, new BufferedMessage());
+        socketChannel.register(selector, SelectionKey.OP_READ,
+                new BufferedMessage(clientID.getAndIncrement()));
     }
 
     @Override

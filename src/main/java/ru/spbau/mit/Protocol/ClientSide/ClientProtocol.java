@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface ClientProtocol {
     void sendRequest(DataOutputStream output, List<Integer> data) throws IOException;
+
     List<Integer> readResponse(DataInputStream input) throws IOException;
 }

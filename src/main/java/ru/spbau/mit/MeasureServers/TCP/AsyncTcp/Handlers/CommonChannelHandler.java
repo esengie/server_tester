@@ -1,5 +1,6 @@
 package ru.spbau.mit.MeasureServers.TCP.AsyncTcp.Handlers;
 
+import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.MeasureServers.TCP.AsyncTcp.TcpAsyncServer;
 import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.BufferedMessage;
 
@@ -12,8 +13,10 @@ import java.util.logging.Logger;
 public abstract class CommonChannelHandler implements CompletionHandler<Integer, BufferedMessage> {
     private static final Logger logger = Logger.getLogger(TcpAsyncServer.class.getName());
     protected final AsynchronousSocketChannel channel;
+    protected final MeasureServer server;
 
-    protected CommonChannelHandler(AsynchronousSocketChannel channel) {
+    protected CommonChannelHandler(MeasureServer server, AsynchronousSocketChannel channel) {
+        this.server = server;
         this.channel = channel;
     }
 
@@ -22,7 +25,7 @@ public abstract class CommonChannelHandler implements CompletionHandler<Integer,
         handleClose();
     }
 
-    protected void handleClose(){
+    protected void handleClose() {
         try {
             channel.close();
         } catch (IOException e) {

@@ -1,9 +1,9 @@
 package ru.spbau.mit.MeasureServers.TCP.Workers;
 
+import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.MeasureServers.TCP.TcpServer;
 import ru.spbau.mit.Protocol.ServerSide.ServerProtocol;
 import ru.spbau.mit.Protocol.ServerSide.SyncTcpServerProtocol;
-import ru.spbau.mit.MeasureServers.Job;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,22 +16,28 @@ import java.util.logging.Logger;
 public class TcpTempWorker implements Runnable {
     private static final Logger logger = Logger.getLogger(TcpServer.class.getName());
 
-    private Socket clientSocket;
-    private ServerProtocol protocol = new SyncTcpServerProtocol();
+    private final MeasureServer server;
+    private final Socket clientSocket;
+    private final ServerProtocol protocol = new SyncTcpServerProtocol();
 
-    public TcpTempWorker(Socket clientSocket){
+    public TcpTempWorker(MeasureServer server, Socket clientSocket) {
+        this.server = server;
         this.clientSocket = clientSocket;
     }
 
     @Override
     public void run() {
+        server.defaultLogClient(this::realRun);
+    }
+
+    private void realRun() {
         try {
             List<Integer> lst = protocol.readRequest(
                     new DataInputStream(clientSocket.getInputStream()));
-            Job job = new Job(lst);
+            MeasureServer.Job job = server.createJob(lst);
             protocol.sendResponse(
                     new DataOutputStream(clientSocket.getOutputStream()),
-                            job.call());
+                    job.call());
             clientSocket.close();
 
         } catch (IOException e) {

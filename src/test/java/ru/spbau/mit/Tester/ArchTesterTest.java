@@ -16,9 +16,9 @@ public class ArchTesterTest {
     private void config(ServerType type) {
         config = UserConfig.builder()
                 .arraySize(10)
-                .clientsSize(2)
-                .nextReqDelta(100)
-                .requestsPerClient(1)
+                .clientsSize(400)
+                .nextReqDelta(20)
+                .requestsPerClient(10)
                 .serverType(type)
                 .build();
         tester = new ArchTester(config);
@@ -26,7 +26,7 @@ public class ArchTesterTest {
 
     private void runCommon() throws IOException {
         tester.testOnce();
-        config.setArraySize(20);
+        config.setClientsSize(20);
         tester.testOnce();
     }
 
@@ -51,14 +51,14 @@ public class ArchTesterTest {
         runCommon();
     }
 
-    @Ignore
+    //    @Ignore
     @Test(timeout = timeout)
     public void testNonBlockPermTCP() throws Exception {
         config(ServerType.TCP_PERM_NON_BLOCK);
         runCommon();
     }
 
-    @Ignore
+    //    @Ignore
     @Test(timeout = timeout)
     public void testAsyncPermTCP() throws Exception {
         config(ServerType.TCP_PERM_ASYNC);

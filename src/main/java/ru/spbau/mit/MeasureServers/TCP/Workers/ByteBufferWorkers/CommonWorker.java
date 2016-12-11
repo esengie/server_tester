@@ -1,6 +1,6 @@
 package ru.spbau.mit.MeasureServers.TCP.Workers.ByteBufferWorkers;
 
-import ru.spbau.mit.MeasureServers.Job;
+import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.BufferedMessage;
 import ru.spbau.mit.MeasureServers.TCP.BufferedMessage.MessageState;
 import ru.spbau.mit.Protocol.ByteProtocol;
@@ -9,9 +9,11 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 public class CommonWorker implements Runnable {
+    protected final MeasureServer server;
     protected final BufferedMessage msg;
 
-    protected CommonWorker(BufferedMessage msg){
+    protected CommonWorker(MeasureServer server, BufferedMessage msg) {
+        this.server = server;
         this.msg = msg;
     }
 
@@ -20,10 +22,11 @@ public class CommonWorker implements Runnable {
         ByteProtocol protocol = new ByteProtocol();
 
         ByteBuffer buf = ByteBuffer.allocate(msg.sizeBuf.limit() + msg.data.limit());
-        buf.put(msg.sizeBuf); buf.put(msg.data);
+        buf.put(msg.sizeBuf);
+        buf.put(msg.data);
         List<Integer> lst = protocol.decodeArray(buf.array());
 
-        Job job = new Job(lst);
+        MeasureServer.Job job = server.createJob(lst);
         msg.data = ByteBuffer.wrap(protocol.encodeArray(job.call()));
         msg.state = MessageState.WAITING_TO_WRITE;
     }

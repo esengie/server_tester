@@ -1,9 +1,9 @@
 package ru.spbau.mit.Tester;
 
-import ru.spbau.mit.MeasureClients.MeasureClient;
-import ru.spbau.mit.MeasureServers.MeasureServer;
 import ru.spbau.mit.CreationAndConfigs.ClientServerFactory;
 import ru.spbau.mit.CreationAndConfigs.UserConfig;
+import ru.spbau.mit.MeasureClients.MeasureClient;
+import ru.spbau.mit.MeasureServers.MeasureServer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,9 +57,13 @@ public class ArchTester {
         try {
             pool.shutdown();
             while (!pool.awaitTermination(5, TimeUnit.SECONDS)) {
-                System.out.println("Waiting for clients - 5 sec");
+                ;
+//                System.out.println("Waiting for clients - 5 sec");
             }
             server.stop();
+            System.out.println(config.getServerType());
+            System.out.println("Median per sorting: " + Long.toString(server.tallyJobs()));
+            System.out.println("       per client: " + Long.toString(server.tallyClients()));
         } catch (InterruptedException e) {
             //
         }
