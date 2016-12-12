@@ -6,6 +6,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.CreationAndConfigs.UserConfig;
+import ru.spbau.mit.CreationAndConfigs.VaryingParameter;
 
 import java.io.IOException;
 
@@ -17,7 +18,7 @@ public class ArchTesterTest {
 
     @BeforeClass
     public static void launchLauncherServer() throws InterruptedException {
-//        new Thread(new ArchTesterRemote()).start();
+        new Thread(new ArchTesterRemote()).start();
     }
 
     private void config(ServerType type) {
@@ -27,13 +28,14 @@ public class ArchTesterTest {
                 .nextReqDelta(20)
                 .requestsPerClient(10)
                 .serverType(type)
+                .varyingParameter(VaryingParameter.CLIENTS_PARALLEL)
                 .build();
         tester = new ArchTester(config, "localhost");
     }
 
     private void runCommon() throws IOException {
         tester.testOnce();
-        config.setClientsSize(20);
+        config.addToVarying(-200);
         tester.testOnce();
     }
 

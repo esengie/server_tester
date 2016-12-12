@@ -55,7 +55,7 @@
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin></Label>
-            <TextField fx:id="varyingTo" alignment="CENTER" prefWidth="80.0" promptText="1">
+            <TextField fx:id="varyingTo" alignment="CENTER" prefWidth="80.0" promptText="2">
                <HBox.margin>
                   <Insets right="40.0" />
                </HBox.margin></TextField>

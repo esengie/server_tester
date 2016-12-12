@@ -33,6 +33,7 @@ public class ArchTester {
     private Socket toServer = null;
 
     public ArchTester(UserConfig config, String hostName) {
+        config.checkConsistency();
         this.config = config;
         this.hostName = hostName;
     }
@@ -84,10 +85,10 @@ public class ArchTester {
                 .perClient(clientTimeLog.tallyMean())
                 .build();
 
-        System.out.println(config.getServerType());
-        System.out.println("Median per sorting: " + Long.toString(res.perSort));
-        System.out.println("       per client request: " + Long.toString(res.perRequest));
-        System.out.println("       per client: " + Long.toString(res.perClient));
+//        System.out.println(config.getServerType());
+//        System.out.println("Median per sorting: " + Long.toString(res.perSort));
+//        System.out.println("       per client request: " + Long.toString(res.perRequest));
+//        System.out.println("       per client: " + Long.toString(res.perClient));
         return res;
     }
 
