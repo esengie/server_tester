@@ -3,10 +3,11 @@ package ru.spbau.mit.Tester;
 import ru.spbau.mit.CreationAndConfigs.ClientServerFactory;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.MeasureServers.MeasureServer;
-import ru.spbau.mit.Protocol.ProtocolConstants;
 import ru.spbau.mit.Tester.ServerLauncherProtocol.ServerLauncherProtocol;
+import ru.spbau.mit.Tester.ServerLauncherProtocol.ServerLauncherProtocolConstants;
 import ru.spbau.mit.Tester.ServerLauncherProtocol.ServerLauncherProtocolImpl;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,31 +18,36 @@ import java.util.logging.Logger;
 /**
  * A single(!) client server
  */
-public class ArchTesterRemote {
+public class ArchTesterRemote implements Runnable {
     private static final Logger logger = Logger.getLogger(ArchTesterRemote.class.getName());
 
     public static void main(String[] args) {
         ArchTesterRemote tester = new ArchTesterRemote();
-        try {
-            tester.run();
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Unexpected error with server", e);
-        }
+        tester.run();
     }
 
     private ServerLauncherProtocol protocol = new ServerLauncherProtocolImpl();
     private MeasureServer server = null;
     private Socket client = null;
 
-    private void run() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(ProtocolConstants.SERVER_PORT);
+    @Override
+    public void run() {
+        try {
+            ServerSocket serverSocket = new ServerSocket(ServerLauncherProtocolConstants.SERVER_PORT);
+            acceptLoop(serverSocket);
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Unexpected error with server", e);
+        }
+    }
+
+    private void acceptLoop(ServerSocket serverSocket) throws IOException {
         while (true) {
             client = serverSocket.accept();
             try {
-                serverLoop();
-            } catch (IOException e){
+                serverActions();
+            } catch (IOException e) {
                 logger.log(Level.SEVERE, "Error in the server loop", e);
-                if (server != null){
+                if (server != null) {
                     server.stop();
                     server = null;
                 }
@@ -49,24 +55,27 @@ public class ArchTesterRemote {
         }
     }
 
-    private void serverLoop() throws IOException {
-        while (true) {
-            try {
-                ServerType type = protocol.readRequest(client.getInputStream());
-                if (type == ServerType.MUTE) {
-                    handleStop();
-                    server = null;
-                    continue;
-                }
-                handleStart(type);
-            } catch (SocketException e) {
-                // this is fine
+    private void serverActions() throws IOException {
+        try {
+            ServerType type = protocol.readRequest(client.getInputStream());
+            if (type == ServerType.MUTE) {
+                throw new IllegalStateException("Need to start first");
             }
+            handleStart(type);
+
+            type = protocol.readRequest(client.getInputStream());
+            if (type != ServerType.MUTE) {
+                throw new IllegalStateException("Need to stop first");
+            }
+            handleStop();
+            server = null;
+        } catch (SocketException | EOFException e) {
+            // this is fine
         }
     }
 
     private void handleStart(ServerType type) throws IOException {
-        if (server != null){
+        if (server != null) {
             throw new IllegalStateException(
                     "Can't start a server before stopping the previous one!");
         }

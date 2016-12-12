@@ -9,7 +9,6 @@ import ru.spbau.mit.MeasureServers.TCP.AsyncTcp.TcpAsyncServer;
 import ru.spbau.mit.MeasureServers.TCP.NonBlockingTcp.TcpNonBlockServer;
 import ru.spbau.mit.MeasureServers.TCP.TcpServer;
 import ru.spbau.mit.MeasureServers.UDP.UdpServer;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class ClientServerFactory {
     public static MeasureServer createServer(ServerType type) {
@@ -26,7 +25,7 @@ public class ClientServerFactory {
             case TCP_PERM_NON_BLOCK:
                 return new TcpNonBlockServer();
             default:
-                throw new NotImplementedException();
+                return null;
         }
     }
 
@@ -43,7 +42,7 @@ public class ClientServerFactory {
             case UDP_THREAD_PER_REQUEST:
                 return new UdpClient();
             default:
-                throw new NotImplementedException();
+                return null;
         }
     }
 }

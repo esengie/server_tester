@@ -1,7 +1,6 @@
 package ru.spbau.mit.Tester.ServerLauncherProtocol;
 
 import ru.spbau.mit.CreationAndConfigs.ServerType;
-import ru.spbau.mit.ProtoMessage.Messages;
 import ru.spbau.mit.Tester.Timing.RunResults;
 
 import java.io.*;

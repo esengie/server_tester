@@ -1,14 +1,18 @@
 package ru.spbau.mit.Tester;
 
 import ru.spbau.mit.CreationAndConfigs.ClientServerFactory;
+import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.CreationAndConfigs.UserConfig;
 import ru.spbau.mit.MeasureClients.MeasureClient;
-import ru.spbau.mit.MeasureServers.MeasureServer;
+import ru.spbau.mit.Tester.ServerLauncherProtocol.ServerLauncherProtocol;
+import ru.spbau.mit.Tester.ServerLauncherProtocol.ServerLauncherProtocolConstants;
+import ru.spbau.mit.Tester.ServerLauncherProtocol.ServerLauncherProtocolImpl;
 import ru.spbau.mit.Tester.Timing.RunResults;
 import ru.spbau.mit.Tester.Timing.TimeLog;
 import ru.spbau.mit.Tester.Timing.UidGenerator;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +27,10 @@ public class ArchTester {
 
     private final UserConfig config;
     private final List<MeasureClient> clients = new ArrayList<>();
+
     private final String hostName;
+    private final ServerLauncherProtocol protocol = new ServerLauncherProtocolImpl();
+    private Socket toServer = null;
 
     public ArchTester(UserConfig config, String hostName) {
         this.config = config;
@@ -32,10 +39,10 @@ public class ArchTester {
 
     public RunResults testOnce() throws IOException {
         ExecutorService pool = Executors.newCachedThreadPool();
-        MeasureServer server = ClientServerFactory.createServer(config.getServerType());
-        server.start();
-        clients.clear();
 
+        startServer(config.getServerType());
+
+        clients.clear();
         for (int i = 0; i < config.getClientsSize(); ++i) {
             clients.add(ClientServerFactory.createClient(config.getServerType()));
         }
@@ -64,24 +71,47 @@ public class ArchTester {
             while (!pool.awaitTermination(5, TimeUnit.SECONDS)) {
                 ;
             }
-            server.stop();
-
-            res = RunResults.builder()
-                    .perSort(server.tallySortTimes())
-                    .perRequest(server.tallyRequestTimes())
-                    .perClient(clientTimeLog.tallyMean())
-                    .build();
-
-            System.out.println(config.getServerType());
-            System.out.println("Median per sorting: " + Long.toString(res.perSort));
-            System.out.println("       per client request: " + Long.toString(res.perRequest));
-            System.out.println("       per client: " + Long.toString(res.perClient));
-
         } catch (InterruptedException e) {
             logger.log(Level.SEVERE, "Logic error, was interrupted", e);
         }
 
+        stopServer();
+        RunResults remoteRes = gatherData();
+
+        res = RunResults.builder()
+                .perSort(remoteRes.perSort)
+                .perRequest(remoteRes.perRequest)
+                .perClient(clientTimeLog.tallyMean())
+                .build();
+
+        System.out.println(config.getServerType());
+        System.out.println("Median per sorting: " + Long.toString(res.perSort));
+        System.out.println("       per client request: " + Long.toString(res.perRequest));
+        System.out.println("       per client: " + Long.toString(res.perClient));
         return res;
+    }
+
+    private RunResults gatherData() throws IOException {
+        RunResults res = protocol.getResults(toServer.getInputStream());
+        toServer.close();
+        toServer = null;
+        return res;
+    }
+
+    private void stopServer() throws IOException {
+        protocol.stopServerOnRemote(toServer.getInputStream(),
+                toServer.getOutputStream());
+    }
+
+    private void startServer(ServerType serverType) throws IOException {
+        if (toServer == null) {
+            toServer = new Socket(hostName, ServerLauncherProtocolConstants.SERVER_PORT);
+        } else {
+            throw new IllegalStateException(
+                    "Socket to server needs to be closed after each run");
+        }
+        protocol.startServerOnRemote(toServer.getInputStream(),
+                toServer.getOutputStream(), serverType);
     }
 
     private void executeRequests(MeasureClient cl) throws IOException, InterruptedException {
