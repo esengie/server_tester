@@ -30,14 +30,14 @@
             <ChoiceBox fx:id="architectureChoice" prefWidth="250.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
             <Label text="Server Architecture" GridPane.halignment="CENTER" />
             <Label text="Requests per client" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <TextField fx:id="reqsPerClient" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="80.0" promptText="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <TextField fx:id="reqsPerClient" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="80.0" promptText="15" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <Label text="Elements per request" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
             <Label text="Clients at the same time" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
             <Label text="Time before next request, ms" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
             <Label text="Varying parameter" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-            <TextField fx:id="arraySize" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="80.0" promptText="10" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-            <TextField fx:id="clientsSize" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="80.0" promptText="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-            <TextField fx:id="nextReqDelta" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="80.0" promptText="50" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+            <TextField fx:id="arraySize" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="80.0" promptText="40" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <TextField fx:id="clientsSize" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="80.0" promptText="40" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <TextField fx:id="nextReqDelta" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="80.0" promptText="100" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
             <ChoiceBox fx:id="varyingChoice" prefWidth="250.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
          </children>
       </GridPane>
@@ -47,7 +47,7 @@
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin></Label>
-            <TextField fx:id="varyingFrom" alignment="CENTER" prefWidth="80.0" promptText="1">
+            <TextField fx:id="varyingFrom" alignment="CENTER" prefWidth="80.0" promptText="10">
                <HBox.margin>
                   <Insets right="40.0" />
                </HBox.margin></TextField>
@@ -55,7 +55,7 @@
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin></Label>
-            <TextField fx:id="varyingTo" alignment="CENTER" prefWidth="80.0" promptText="2">
+            <TextField fx:id="varyingTo" alignment="CENTER" prefWidth="80.0" promptText="200">
                <HBox.margin>
                   <Insets right="40.0" />
                </HBox.margin></TextField>
@@ -63,7 +63,7 @@
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin></Label>
-            <TextField fx:id="varyingStep" alignment="CENTER" prefWidth="80.0" promptText="1" />
+            <TextField fx:id="varyingStep" alignment="CENTER" prefWidth="80.0" promptText="20" />
          </children>
       </HBox>
       <Button fx:id="startBtn" alignment="CENTER" mnemonicParsing="false" text="Start Test">
