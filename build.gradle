@@ -47,6 +47,11 @@ task remoteLauncher(type: OneJar) {
     archiveName = 'launcher.jar'
 }
 
+task localController(type: OneJar) {
+    mainClass = 'ru.spbau.mit.GUI.Controller'
+    archiveName = 'client.jar'
+}
+
 protobuf {
     protoc {
         artifact = 'com.google.protobuf:protoc:3.0.0'

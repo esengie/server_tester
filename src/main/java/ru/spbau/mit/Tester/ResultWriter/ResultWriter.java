@@ -66,8 +66,10 @@ public class ResultWriter {
         for (int i = 0; i < results.size(); ++i) {
             RunResults res = results.get(i);
             write = MessageFormat.format(format,
-                    step.getStart() + i * step.getStep(),
-                    res.perSort, res.perRequest, res.perClient);
+                    Integer.toString(step.getStart() + i * step.getStep()),
+                    Long.toString(res.perSort),
+                    Long.toString(res.perRequest),
+                    Long.toString(res.perClient));
             pw.println(write);
         }
         pw.close();
@@ -91,9 +93,9 @@ public class ResultWriter {
 
         config.setVarying(step.getStart());
         write = MessageFormat.format(fixedArgs,
-                config.getArraySize(),
-                config.getClientsSize(),
-                config.getNextReqDelta());
+                Integer.toString(config.getArraySize()),
+                Integer.toString(config.getClientsSize()),
+                Integer.toString(config.getNextReqDelta()));
         pw.println(write);
         pw.close();
     }

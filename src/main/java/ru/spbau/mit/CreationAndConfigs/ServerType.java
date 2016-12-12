@@ -1,7 +1,5 @@
 package ru.spbau.mit.CreationAndConfigs;
 
-import sun.reflect.generics.tree.ArrayTypeSignature;
-
 import java.util.Arrays;
 import java.util.List;
 

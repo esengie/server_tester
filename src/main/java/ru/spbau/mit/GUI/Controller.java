@@ -11,6 +11,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 import ru.spbau.mit.CreationAndConfigs.IntervalWithStep;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.CreationAndConfigs.UserConfig;
@@ -23,6 +25,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -95,7 +100,23 @@ public class Controller extends Application {
                 .observableArrayList(VaryingParameter.values()));
         varyingChoice.getSelectionModel().selectFirst();
 
+        reqsPerClient.setTextFormatter(getPosIntFormatter());
+        arraySize.setTextFormatter(getPosIntFormatter());
+        clientsSize.setTextFormatter(getPosIntFormatter());
+        nextReqDelta.setTextFormatter(getPosIntFormatter());
+
+        varyingFrom.setTextFormatter(getPosIntFormatter());
+        varyingTo.setTextFormatter(getPosIntFormatter());
+        varyingStep.setTextFormatter(getPosIntFormatter());
+
         setupUploadButton();
+    }
+
+    private static TextFormatter<Number> getPosIntFormatter(){
+        DecimalFormatSymbols sb = new DecimalFormatSymbols();
+        sb.setMinusSign(' ');
+        return new TextFormatter<>(
+                new NumberStringConverter(new DecimalFormat("#", sb)));
     }
 
     private void initWriter() {
@@ -137,7 +158,7 @@ public class Controller extends Application {
         step = IntervalWithStep.builder()
                 .start(getInt(varyingFrom))
                 .end(getInt(varyingTo))
-                .step(getInt(varyingStep))
+                .step(getInt(varyingStep) > 0 ? getInt(varyingStep) : 1)
                 .build();
 
         tester = new ArchTester(config, hostName);
