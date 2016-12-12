@@ -16,7 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * A single(!) client server
+ * A single client server - one measurement, wait for next client etc.
  */
 public class ArchTesterRemote implements Runnable {
     private static final Logger logger = Logger.getLogger(ArchTesterRemote.class.getName());
@@ -76,8 +76,7 @@ public class ArchTesterRemote implements Runnable {
 
     private void handleStart(ServerType type) throws IOException {
         if (server != null) {
-            throw new IllegalStateException(
-                    "Can't start a server before stopping the previous one!");
+            server.stop();
         }
         server = ClientServerFactory.createServer(type);
         server.start();
