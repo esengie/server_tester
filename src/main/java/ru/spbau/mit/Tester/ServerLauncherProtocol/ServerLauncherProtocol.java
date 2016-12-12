@@ -3,7 +3,9 @@ package ru.spbau.mit.Tester.ServerLauncherProtocol;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.Tester.Timing.RunResults;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Protocol for talking to remote server launcher.

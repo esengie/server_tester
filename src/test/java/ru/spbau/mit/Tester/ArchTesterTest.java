@@ -1,6 +1,5 @@
 package ru.spbau.mit.Tester;
 
-import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
