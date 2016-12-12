@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.spbau.mit.MeasureClients.MeasureClient;
+import ru.spbau.mit.Tester.ArchTester;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,10 +22,10 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ClientAppG extends Application {
-    private static final Logger logger = Logger.getLogger(ClientAppG.class.getName());
-    private static MeasureClient client;
-    private static Thread lister;
+public class GraphicStuff extends Application {
+    private static final Logger logger = Logger.getLogger(GraphicStuff.class.getName());
+    private ArchTester tester;
+    private static String hostName = "localhost";
 
     @FXML
     private Button uploadBtn;
@@ -38,6 +39,9 @@ public class ClientAppG extends Application {
     private Stage stage;
 
     public static void main(String[] args) {
+        if (args.length != 0){
+            hostName = args[0];
+        }
         launch(args);
     }
 

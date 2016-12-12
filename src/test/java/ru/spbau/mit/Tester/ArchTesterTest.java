@@ -17,7 +17,7 @@ public class ArchTesterTest {
 
     @BeforeClass
     public static void launchLauncherServer() throws InterruptedException {
-        new Thread(new ArchTesterRemote()).start();
+//        new Thread(new ArchTesterRemote()).start();
     }
 
     private void config(ServerType type) {
@@ -37,21 +37,21 @@ public class ArchTesterTest {
         tester.testOnce();
     }
 
-//    @Ignore
+    @Ignore
     @Test(timeout = timeout)
     public void testTempTCP() throws Exception {
         config(ServerType.TCP_TEMP_SINGLE_THREAD);
         runCommon();
     }
 
-//    @Ignore
+    @Ignore
     @Test(timeout = timeout)
     public void testThreadsPermTCP() throws Exception {
         config(ServerType.TCP_PERM_THREADS);
         runCommon();
     }
 
-//    @Ignore
+    @Ignore
     @Test(timeout = timeout)
     public void testCachedPoolPermTCP() throws Exception {
         config(ServerType.TCP_PERM_CACHED_POOL);
@@ -79,7 +79,7 @@ public class ArchTesterTest {
         runCommon();
     }
 
-//    @Ignore
+    @Ignore
     @Test(timeout = timeout)
     public void testThreadsUDP() throws Exception {
         config(ServerType.UDP_THREAD_PER_REQUEST);
