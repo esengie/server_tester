@@ -20,6 +20,8 @@ public class UserConfig {
     private final int requestsPerClient;
     @Getter
     @NonNull
+    private final VaryingParameter varyingParameter;
+    @Getter
+    @NonNull
     private final ServerType serverType;
-
 }
