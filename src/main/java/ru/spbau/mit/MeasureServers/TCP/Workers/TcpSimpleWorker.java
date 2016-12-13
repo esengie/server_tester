@@ -13,23 +13,21 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TcpPermWorker implements Runnable {
+public class TcpSimpleWorker implements Runnable {
     private static final Logger logger = Logger.getLogger(TcpServer.class.getName());
 
     private final MeasureServer server;
     private final Socket clientSocket;
     private final ServerProtocol protocol = new SyncTcpServerProtocol();
 
-    public TcpPermWorker(MeasureServer server, Socket clientSocket) {
+    public TcpSimpleWorker(MeasureServer server, Socket clientSocket) {
         this.server = server;
         this.clientSocket = clientSocket;
     }
 
     @Override
     public void run() {
-        while (!Thread.interrupted()) {
-            server.defaultLogClient(this::runOnce);
-        }
+        server.defaultLogClient(this::runOnce);
     }
 
     private void runOnce() {

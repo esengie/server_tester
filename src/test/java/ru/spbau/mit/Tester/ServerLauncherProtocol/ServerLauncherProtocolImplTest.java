@@ -5,9 +5,11 @@ import org.junit.Test;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.Tester.Timing.RunResults;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ServerLauncherProtocolImplTest {
 
@@ -27,13 +29,13 @@ public class ServerLauncherProtocolImplTest {
         protocol.sendAck(servOutContent); //single threaded cheat
 
         protocol.startServerOnRemote(new ByteArrayInputStream(servOutContent.toByteArray()),
-                clientOutContent, ServerType.TCP_PERM_CACHED_POOL);
+                clientOutContent, ServerType.TCP_PERM_NON_BLOCK);
 
         ServerType type = protocol.readRequest(new ByteArrayInputStream(
                 clientOutContent.toByteArray())
         );
 
-        assertEquals(ServerType.TCP_PERM_CACHED_POOL, type);
+        assertEquals(ServerType.TCP_PERM_NON_BLOCK, type);
     }
 
     @Test

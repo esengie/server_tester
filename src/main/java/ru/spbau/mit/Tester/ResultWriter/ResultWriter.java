@@ -36,10 +36,13 @@ public class ResultWriter {
     }
 
     private static File getHalfFullDir(File dir) {
-        for (File f : dir.listFiles()){
-            if (f.listFiles().length < ServerType.validValues().size() * 3 * 2){
-                return f;
-            }
+        if (dir.listFiles().length == 0)
+            return null;
+
+        File f = dir.listFiles()[dir.listFiles().length - 1];
+
+        if (f.listFiles().length < ServerType.validValues().size() * 3 * 2) {
+            return f;
         }
         return null;
     }

@@ -11,7 +11,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import ru.spbau.mit.CreationAndConfigs.IntervalWithStep;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
@@ -27,15 +26,17 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Controller extends Application {
     private static final Logger logger = Logger.getLogger(Controller.class.getName());
     private static String hostName = "localhost";
+    private static ExecutorService pool = Executors.newSingleThreadExecutor();
 
     private ArchTester tester;
     private UserConfig config;
@@ -112,7 +113,7 @@ public class Controller extends Application {
         setupUploadButton();
     }
 
-    private static TextFormatter<Number> getPosIntFormatter(){
+    private static TextFormatter<Number> getPosIntFormatter() {
         DecimalFormatSymbols sb = new DecimalFormatSymbols();
         sb.setMinusSign(' ');
         return new TextFormatter<>(
@@ -131,18 +132,23 @@ public class Controller extends Application {
         }
     }
 
+    private String prev;
     private void setupUploadButton() {
-        startBtn.setOnMouseClicked(mouseEvent -> {
+        startBtn.setOnMousePressed(mouseEvent -> {
             gatherClientInput();
-            showBusy();
+            prev = showBusy();
+        });
+
+        startBtn.setOnMouseReleased(mouseEvent -> pool.submit(() -> {
             try {
                 gatherServerData();
             } catch (IOException e) {
                 logger.log(Level.WARNING, "Error writing logs", e);
                 showException(e);
             }
-            closeBusy();
-        });
+            Platform.runLater(() -> closeBusy(prev));
+        }));
+
     }
 
     private void gatherClientInput() {
@@ -184,12 +190,16 @@ public class Controller extends Application {
         wr.writeResults(config, step, results);
     }
 
-    private void showBusy() {
+    private String showBusy() {
+        String res = startBtn.getText();
         startBtn.setDisable(true);
+        startBtn.setText("Please wait");
+        return res;
     }
 
-    private void closeBusy() {
+    private void closeBusy(String prev) {
         startBtn.setDisable(false);
+        startBtn.setText(prev);
     }
 
     private Alert alert = null;

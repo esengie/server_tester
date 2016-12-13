@@ -1,6 +1,5 @@
 package ru.spbau.mit.Tester;
 
-import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -24,9 +23,9 @@ public class ArchTesterTest {
     private void config(ServerType type) {
         config = UserConfig.builder()
                 .arraySize(10)
-                .clientsSize(250)
-                .nextReqDelta(20)
-                .requestsPerClient(10)
+                .clientsSize(150)
+                .nextReqDelta(50)
+                .requestsPerClient(40)
                 .serverType(type)
                 .varyingParameter(VaryingParameter.CLIENTS_PARALLEL)
                 .build();
@@ -35,7 +34,7 @@ public class ArchTesterTest {
 
     private void runCommon() throws IOException {
         tester.testOnce();
-        config.addToVarying(-200);
+        config.addToVarying(-100);
         tester.testOnce();
     }
 
@@ -46,7 +45,7 @@ public class ArchTesterTest {
         runCommon();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testThreadsPermTCP() throws Exception {
         config(ServerType.TCP_PERM_THREADS);
@@ -74,7 +73,7 @@ public class ArchTesterTest {
         runCommon();
     }
 
-//    @Ignore
+    @Ignore
     @Test(timeout = timeout)
     public void testFixedPoolUDP() throws Exception {
         config(ServerType.UDP_FIXED_THREAD_POOL);

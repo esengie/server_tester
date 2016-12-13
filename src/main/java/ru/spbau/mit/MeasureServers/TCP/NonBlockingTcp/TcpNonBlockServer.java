@@ -134,8 +134,7 @@ public class TcpNonBlockServer extends MeasureServer {
         serverChannel = ServerSocketChannel.open();
         serverChannel.configureBlocking(false);
 
-        serverChannel.bind(new InetSocketAddress("localhost",
-                ProtocolConstants.SERVER_PORT));
+        serverChannel.bind(new InetSocketAddress(ProtocolConstants.SERVER_PORT));
         serverChannel.register(selector, SelectionKey.OP_ACCEPT);
 
         serverThread.start();

@@ -5,7 +5,6 @@ import org.junit.Test;
 import ru.spbau.mit.CreationAndConfigs.ClientServerFactory;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.MeasureClients.MeasureClient;
-import ru.spbau.mit.MeasureServers.MeasureServer;
 
 import java.io.IOException;
 import java.util.Arrays;

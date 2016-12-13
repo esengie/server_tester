@@ -1,0 +1,8 @@
+*.iml
+.idea/*
+.gradle/*
+build/*
+generated-sources/*
+*.ipynb
+results/1/*
+*.jar
