@@ -22,6 +22,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This is the main tester class, talks to the server through the ServerLauncherProtocol,
+ * gathers the results.
+ * <p>
+ * Creates a cached pool during each test launch, and fills it with clients.
+ * <p>
+ * Returns RunResults.
+ */
 public class ArchTester {
     private static final Logger logger = Logger.getLogger(ArchTester.class.getName());
 

@@ -18,6 +18,10 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * A non-blocking server, dead simple, except for a bit unconventional select:
+ * has a timeout to not block indefinitely during stopping
+ */
 public class TcpNonBlockServer extends MeasureServer {
     private ServerSocketChannel serverChannel;
     private Selector selector;

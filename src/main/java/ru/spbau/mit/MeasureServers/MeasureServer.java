@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
- * Always starts on port 8082
+ * Always starts on port 8082, contains all the common stuff
+ * <p>
+ * Like all the logging things are here and the server state too
  */
 public abstract class MeasureServer {
     private final TimeLog jobLog = new TimeLog();
@@ -69,6 +71,9 @@ public abstract class MeasureServer {
         return serverState == ServiceState.STOPPED;
     }
 
+    /**
+     * The job class, once free, now lives here with his mum.
+     */
     public class Job implements Callable<List<Integer>> {
         private final ArrayList<Integer> data;
 

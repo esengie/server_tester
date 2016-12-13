@@ -45,28 +45,28 @@ public class ArchTesterTest {
         runCommon();
     }
 
-//    @Ignore
+    //    @Ignore
     @Test(timeout = timeout)
     public void testThreadsPermTCP() throws Exception {
         config(ServerType.TCP_PERM_THREADS);
         runCommon();
     }
 
-//    @Ignore
+    //    @Ignore
     @Test(timeout = timeout)
     public void testCachedPoolPermTCP() throws Exception {
         config(ServerType.TCP_PERM_CACHED_POOL);
         runCommon();
     }
 
-//    @Ignore
+    //    @Ignore
     @Test(timeout = timeout)
     public void testNonBlockPermTCP() throws Exception {
         config(ServerType.TCP_PERM_NON_BLOCK);
         runCommon();
     }
 
-//    @Ignore
+    //    @Ignore
     @Test(timeout = timeout)
     public void testAsyncPermTCP() throws Exception {
         config(ServerType.TCP_PERM_ASYNC);

@@ -33,6 +33,12 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * A fairly simple controller, forces ints inside textfields, shows exceptions and
+ * has a start button
+ * <p>
+ * Starts a singleThreadExecutor to handle actual server communication and test running
+ */
 public class Controller extends Application {
     private static final Logger logger = Logger.getLogger(Controller.class.getName());
     private static String hostName = "localhost";

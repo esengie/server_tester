@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * A protocol used by NIO TCP and all the UDP servers,
+ * still, uses the default old TCP protocol inside. So it's an adapter class
+ */
 public class ByteProtocol {
     public static final int MAX_PACKET = 65508;
     private static final Logger logger = Logger.getLogger(ByteProtocol.class.getName());
@@ -30,7 +34,7 @@ public class ByteProtocol {
         try {
             res = protocol.readResponse(new DataInputStream(inputStream));
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "This is an error in my usage", e);
+            logger.log(Level.SEVERE, "This is an error in usage by programmer", e);
         }
         return res;
     }

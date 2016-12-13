@@ -3,6 +3,12 @@ package ru.spbau.mit.Tester.Timing;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * This is the logger of time it takes to handle various operations. Should be used in
+ * conjunction with some UidGenerator.
+ * <p>
+ * Can tally all the logs using a median or a mean. Clears itself after each tally
+ */
 public class TimeLog {
     private volatile Map<Integer, Long> starts = new ConcurrentHashMap<>();
     private volatile Map<Integer, Long> ends = new ConcurrentHashMap<>();

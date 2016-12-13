@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * A worker used in simple TCP socket connections
+ */
 public class TcpSimpleWorker implements Runnable {
     private static final Logger logger = Logger.getLogger(TcpServer.class.getName());
 

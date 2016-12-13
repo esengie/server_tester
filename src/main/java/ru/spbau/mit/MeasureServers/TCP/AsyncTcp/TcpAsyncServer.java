@@ -13,6 +13,12 @@ import java.nio.channels.CompletionHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * A simple tcp async server
+ * <p>
+ * We're dumping the data for sorting in the fixed pool,
+ * Didn't want to thread it through the whole execution so it lives in the readHandler class - bad?
+ */
 public class TcpAsyncServer extends MeasureServer {
     private static final Logger logger = Logger.getLogger(TcpAsyncServer.class.getName());
 

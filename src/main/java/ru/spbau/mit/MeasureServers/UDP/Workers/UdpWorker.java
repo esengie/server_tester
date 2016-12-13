@@ -11,6 +11,9 @@ import java.net.DatagramSocket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The server creates all the jobs because it controls all the Uids
+ */
 public class UdpWorker implements Runnable {
     private static final Logger logger = Logger.getLogger(UdpServer.class.getName());
 
@@ -36,7 +39,7 @@ public class UdpWorker implements Runnable {
         try {
             socket.send(response);
         } catch (IOException e) {
-            logger.log(Level.FINER, "Udp send error", e);
+            logger.log(Level.WARNING, "Udp send error", e);
         }
         server.clientLog.logEnd(logID);
     }

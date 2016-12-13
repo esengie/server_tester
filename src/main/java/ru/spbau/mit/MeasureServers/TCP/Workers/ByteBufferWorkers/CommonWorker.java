@@ -8,6 +8,9 @@ import ru.spbau.mit.Protocol.ByteProtocol;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+/**
+ * A common part of nonblocking and async tcp workers
+ */
 public class CommonWorker implements Runnable {
     protected final MeasureServer server;
     protected final BufferedMessage msg;

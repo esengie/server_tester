@@ -69,8 +69,8 @@ public class TcpServer extends MeasureServer {
         switch (type) {
             case TCP_PERM_THREADS:
                 Thread t = new Thread(permWorker);
-                t.start();
                 threads.add(t);
+                t.start();
                 break;
             case TCP_PERM_CACHED_POOL:
                 threadPool.execute(permWorker);
@@ -79,7 +79,7 @@ public class TcpServer extends MeasureServer {
                 new TcpSimpleWorker(this, clientSocket).run();
                 try {
                     clientSocket.getInputStream().read();
-                } catch (IOException e){
+                } catch (IOException e) {
                     logger.log(Level.FINER, "Client closed the connection", e);
                 } finally {
                     try {

@@ -12,6 +12,9 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.List;
 
+/**
+ * Has a weird connect because the server drops him under a load
+ */
 public class TcpClientTemp implements MeasureClient {
     private String host = null;
     private final ClientProtocol protocol = new TcpClientProtocol();
@@ -28,7 +31,7 @@ public class TcpClientTemp implements MeasureClient {
     @Override
     public List<Integer> executeRequest(List<Integer> lst) throws IOException {
         Socket socket;
-        while(true) {
+        while (true) {
             try {
                 socket = new Socket();
                 socket.connect(new InetSocketAddress(host, ProtocolConstants.SERVER_PORT),

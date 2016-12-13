@@ -72,7 +72,7 @@ public class ArchTesterRemote implements Runnable {
         } catch (SocketException | EOFException e) {
             try {
                 client.close();
-            } catch (SocketException e2){
+            } catch (SocketException e2) {
                 //
             }
         }

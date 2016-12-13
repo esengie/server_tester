@@ -10,12 +10,16 @@ import java.nio.channels.CompletionHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class CommonChannelHandler implements CompletionHandler<Integer, BufferedMessage> {
+/**
+ * The common parts of a read/write handler, there were no server before measurements
+ * But, alas, it contains all the Uid generators!
+ */
+abstract class CommonChannelHandler implements CompletionHandler<Integer, BufferedMessage> {
     private static final Logger logger = Logger.getLogger(TcpAsyncServer.class.getName());
-    protected final AsynchronousSocketChannel channel;
+    final AsynchronousSocketChannel channel;
     protected final MeasureServer server;
 
-    protected CommonChannelHandler(MeasureServer server, AsynchronousSocketChannel channel) {
+    CommonChannelHandler(MeasureServer server, AsynchronousSocketChannel channel) {
         this.server = server;
         this.channel = channel;
     }
@@ -25,7 +29,7 @@ public abstract class CommonChannelHandler implements CompletionHandler<Integer,
         handleClose();
     }
 
-    protected void handleClose() {
+    void handleClose() {
         try {
             channel.close();
         } catch (IOException e) {

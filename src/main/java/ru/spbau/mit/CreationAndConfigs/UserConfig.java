@@ -4,6 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 
+/**
+ * A user config class, contains the parameters for testing architectures
+ */
 @Builder
 public class UserConfig implements Cloneable {
     @Getter
@@ -21,8 +24,8 @@ public class UserConfig implements Cloneable {
     @NonNull
     private final ServerType serverType;
 
-    public void addToVarying(int difference){
-        switch (varyingParameter){
+    public void addToVarying(int difference) {
+        switch (varyingParameter) {
             case ELEMENTS_PER_REQ:
                 arraySize += difference;
                 break;
@@ -36,14 +39,14 @@ public class UserConfig implements Cloneable {
         checkConsistency();
     }
 
-    public void checkConsistency(){
+    public void checkConsistency() {
         if (!(nextReqDelta >= 0 && requestsPerClient > 0 && clientsSize > 0 && arraySize > 0)) {
             throw new IllegalStateException("Can't have the config in the negatives");
         }
     }
 
-    public int getVarying(){
-        switch (varyingParameter){
+    public int getVarying() {
+        switch (varyingParameter) {
             case ELEMENTS_PER_REQ:
                 return arraySize;
             case CLIENTS_PARALLEL:
@@ -59,9 +62,9 @@ public class UserConfig implements Cloneable {
     }
 
     @Override
-    public UserConfig clone(){
+    public UserConfig clone() {
         try {
-            return (UserConfig)super.clone();
+            return (UserConfig) super.clone();
         } catch (CloneNotSupportedException e) {
             //
         }

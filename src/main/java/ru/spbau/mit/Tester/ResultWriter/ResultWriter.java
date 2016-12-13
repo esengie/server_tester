@@ -13,12 +13,14 @@ import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 
 /**
+ * Writes out a csv for each test variant (overwrites if we already have such a csv file) +
+ * writes a csv with fixed parameters of the test
+ * <p>
  * We're given a dir to write out the results to, we assume it's empty at the start
+ * If our latest dir has 7 * 3 * 2 files we create the next folder
  */
 public class ResultWriter {
     private final File dir;

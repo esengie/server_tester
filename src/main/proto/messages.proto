@@ -15,4 +15,5 @@ message ServerType {
     required string serverType = 1;
 }
 
-message Ack {}
+message Ack {
+}

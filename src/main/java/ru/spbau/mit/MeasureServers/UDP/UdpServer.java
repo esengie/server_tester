@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * All the udp server types except for async one
+ * All the udp server types live here
  */
 public class UdpServer extends MeasureServer {
     private DatagramSocket serverSocket = null;
@@ -50,7 +50,7 @@ public class UdpServer extends MeasureServer {
                     }
                 }
             }
-            threadPool.shutdownNow();
+            threadPool.shutdown();
         }
     }
 
