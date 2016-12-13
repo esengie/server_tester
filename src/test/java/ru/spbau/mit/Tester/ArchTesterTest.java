@@ -23,7 +23,7 @@ public class ArchTesterTest {
     private void config(ServerType type) {
         config = UserConfig.builder()
                 .arraySize(10)
-                .clientsSize(250)
+                .clientsSize(450)
                 .nextReqDelta(50)
                 .requestsPerClient(40)
                 .serverType(type)
@@ -34,7 +34,7 @@ public class ArchTesterTest {
 
     private void runCommon() throws IOException {
         tester.testOnce();
-        config.addToVarying(200);
+        config.addToVarying(-400);
         tester.testOnce();
     }
 

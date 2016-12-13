@@ -77,9 +77,15 @@ public class TcpServer extends MeasureServer {
             case TCP_TEMP_SINGLE_THREAD:
                 new TcpSimpleWorker(this, clientSocket).run();
                 try {
-                    clientSocket.close();
+                    clientSocket.getInputStream().read();
                 } catch (IOException e){
-                    //
+                    logger.log(Level.FINER, "Client closed the connection", e);
+                } finally {
+                    try {
+                        clientSocket.close();
+                    } catch (IOException e) {
+                        //
+                    }
                 }
                 break;
         }
