@@ -47,9 +47,14 @@ task remoteLauncher(type: OneJar) {
     archiveName = 'launcher.jar'
 }
 
-task localController(type: OneJar) {
+task localControllerGen(type: OneJar) {
     mainClass = 'ru.spbau.mit.GUI.Controller'
     archiveName = 'client.jar'
+}
+
+task localController(type: Copy) {
+    from localControllerGen
+    into '.'
 }
 
 protobuf {

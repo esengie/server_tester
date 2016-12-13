@@ -12,8 +12,6 @@ The same for temp TCP - maybe we can't queue so many guys on accept?
 
 ./gradlew remoteLauncher  -> generates build/libs/client.jar
 
-Put client.jar inside the root, if you want to continue writing logs into "results" folder
-
 Put the launcher on some machine (or just launch on yours)
 
 Launch the client, specifying the ip of the launcher's machine (or leave blank for localhost)
