@@ -139,17 +139,15 @@ public class Controller extends Application {
             prev = showBusy();
         });
 
-        startBtn.setOnMouseReleased(mouseEvent -> {
-            pool.submit(() -> {
-                try {
-                    gatherServerData();
-                } catch (IOException e) {
-                    logger.log(Level.WARNING, "Error writing logs", e);
-                    showException(e);
-                }
-                Platform.runLater(() -> closeBusy(prev));
-            });
-        });
+        startBtn.setOnMouseReleased(mouseEvent -> pool.submit(() -> {
+            try {
+                gatherServerData();
+            } catch (IOException e) {
+                logger.log(Level.WARNING, "Error writing logs", e);
+                showException(e);
+            }
+            Platform.runLater(() -> closeBusy(prev));
+        }));
 
     }
 
