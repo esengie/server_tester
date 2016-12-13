@@ -132,14 +132,14 @@ public class Controller extends Application {
     private void setupUploadButton() {
         startBtn.setOnMouseClicked(mouseEvent -> {
             gatherClientInput();
-            showBusy();
+            String prev = showBusy();
             try {
                 gatherServerData();
             } catch (IOException e) {
                 logger.log(Level.WARNING, "Error writing logs", e);
                 showException(e);
             }
-            closeBusy();
+            closeBusy(prev);
         });
     }
 
@@ -182,12 +182,16 @@ public class Controller extends Application {
         wr.writeResults(config, step, results);
     }
 
-    private void showBusy() {
+    private String showBusy() {
         startBtn.setDisable(true);
+        String prev = startBtn.getText();
+        startBtn.setText("Please wait");
+        return prev;
     }
 
-    private void closeBusy() {
+    private void closeBusy(String prev) {
         startBtn.setDisable(false);
+        startBtn.setText(prev);
     }
 
     private Alert alert = null;
