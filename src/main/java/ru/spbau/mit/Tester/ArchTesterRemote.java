@@ -70,7 +70,11 @@ public class ArchTesterRemote implements Runnable {
             handleStop();
             server = null;
         } catch (SocketException | EOFException e) {
-            // this is fine
+            try {
+                client.close();
+            } catch (SocketException e2){
+                //
+            }
         }
     }
 

@@ -28,12 +28,15 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Controller extends Application {
     private static final Logger logger = Logger.getLogger(Controller.class.getName());
     private static String hostName = "localhost";
+    private static ExecutorService pool = Executors.newSingleThreadExecutor();
 
     private ArchTester tester;
     private UserConfig config;
@@ -110,7 +113,7 @@ public class Controller extends Application {
         setupUploadButton();
     }
 
-    private static TextFormatter<Number> getPosIntFormatter(){
+    private static TextFormatter<Number> getPosIntFormatter() {
         DecimalFormatSymbols sb = new DecimalFormatSymbols();
         sb.setMinusSign(' ');
         return new TextFormatter<>(
@@ -129,18 +132,25 @@ public class Controller extends Application {
         }
     }
 
+    private String prev;
     private void setupUploadButton() {
-        startBtn.setOnMouseClicked(mouseEvent -> {
+        startBtn.setOnMousePressed(mouseEvent -> {
             gatherClientInput();
-            String prev = showBusy();
-            try {
-                gatherServerData();
-            } catch (IOException e) {
-                logger.log(Level.WARNING, "Error writing logs", e);
-                showException(e);
-            }
-            closeBusy(prev);
+            prev = showBusy();
         });
+
+        startBtn.setOnMouseReleased(mouseEvent -> {
+            pool.submit(() -> {
+                try {
+                    gatherServerData();
+                } catch (IOException e) {
+                    logger.log(Level.WARNING, "Error writing logs", e);
+                    showException(e);
+                }
+                Platform.runLater(() -> closeBusy(prev));
+            });
+        });
+
     }
 
     private void gatherClientInput() {
@@ -183,10 +193,10 @@ public class Controller extends Application {
     }
 
     private String showBusy() {
-        String prev = startBtn.getText();
-        startBtn.setText("Please wait");
+        String res = startBtn.getText();
         startBtn.setDisable(true);
-        return prev;
+        startBtn.setText("Please wait");
+        return res;
     }
 
     private void closeBusy(String prev) {
