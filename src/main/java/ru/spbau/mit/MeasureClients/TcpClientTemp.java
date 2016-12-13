@@ -7,7 +7,9 @@ import ru.spbau.mit.Protocol.ProtocolConstants;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.List;
 
 public class TcpClientTemp implements MeasureClient {
@@ -25,7 +27,17 @@ public class TcpClientTemp implements MeasureClient {
 
     @Override
     public List<Integer> executeRequest(List<Integer> lst) throws IOException {
-        Socket socket = new Socket(host, ProtocolConstants.SERVER_PORT);
+        Socket socket;
+        while(true) {
+            try {
+                socket = new Socket();
+                socket.connect(new InetSocketAddress(host, ProtocolConstants.SERVER_PORT),
+                        ProtocolConstants.CLIENT_TIMEOUT);
+                break;
+            } catch (SocketTimeoutException e) {
+                //
+            }
+        }
         protocol.sendRequest(new DataOutputStream(socket.getOutputStream()), lst);
         List<Integer> reply = protocol.readResponse(new DataInputStream(socket.getInputStream()));
         socket.close();

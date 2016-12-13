@@ -24,8 +24,8 @@ public class ArchTesterTest {
         config = UserConfig.builder()
                 .arraySize(10)
                 .clientsSize(250)
-                .nextReqDelta(20)
-                .requestsPerClient(10)
+                .nextReqDelta(50)
+                .requestsPerClient(40)
                 .serverType(type)
                 .varyingParameter(VaryingParameter.CLIENTS_PARALLEL)
                 .build();
@@ -34,11 +34,11 @@ public class ArchTesterTest {
 
     private void runCommon() throws IOException {
         tester.testOnce();
-        config.addToVarying(-200);
+        config.addToVarying(200);
         tester.testOnce();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testTempTCP() throws Exception {
         config(ServerType.TCP_TEMP_SINGLE_THREAD);
@@ -73,7 +73,7 @@ public class ArchTesterTest {
         runCommon();
     }
 
-//    @Ignore
+    @Ignore
     @Test(timeout = timeout)
     public void testFixedPoolUDP() throws Exception {
         config(ServerType.UDP_FIXED_THREAD_POOL);
