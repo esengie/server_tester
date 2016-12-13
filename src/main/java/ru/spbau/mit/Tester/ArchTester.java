@@ -74,6 +74,7 @@ public class ArchTester {
             }
         } catch (InterruptedException e) {
             logger.log(Level.SEVERE, "Logic error, was interrupted", e);
+            pool.shutdownNow();
         }
 
         stopServer();

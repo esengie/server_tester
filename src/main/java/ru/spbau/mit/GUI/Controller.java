@@ -79,7 +79,6 @@ public class Controller extends Application {
         try {
             VBox page = FXMLLoader.load(this.getClass().getResource("/ui.fxml"));
             Scene scene = new Scene(page);
-            Stage stage = primaryStage;
             primaryStage.setScene(scene);
             primaryStage.setTitle("Network performance");
             primaryStage.show();
@@ -148,7 +147,13 @@ public class Controller extends Application {
             }
             Platform.runLater(() -> closeBusy(prev));
         }));
+    }
 
+    @Override
+    public void stop() throws Exception {
+        stoppingUI = true;
+        pool.shutdown();
+        super.stop();
     }
 
     private void gatherClientInput() {
@@ -177,9 +182,12 @@ public class Controller extends Application {
         return Integer.parseInt(field.getText());
     }
 
+    private volatile boolean stoppingUI = false;
     private void gatherServerData() throws IOException {
         List<RunResults> results = new ArrayList<>();
         for (int i = step.getStart(); i < step.getEnd(); i += step.getStep()) {
+            if (stoppingUI)
+                break;
             config.setVarying(i);
             try {
                 results.add(tester.testOnce());

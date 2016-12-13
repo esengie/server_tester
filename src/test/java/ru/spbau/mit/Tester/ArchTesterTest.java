@@ -52,7 +52,7 @@ public class ArchTesterTest {
         runCommon();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testCachedPoolPermTCP() throws Exception {
         config(ServerType.TCP_PERM_CACHED_POOL);
