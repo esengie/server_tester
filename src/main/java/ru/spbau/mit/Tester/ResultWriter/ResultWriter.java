@@ -11,7 +11,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -36,10 +39,12 @@ public class ResultWriter {
     }
 
     private static File getHalfFullDir(File dir) {
-        if (dir.listFiles().length == 0)
+        File[] files = dir.listFiles();
+        if (files.length == 0)
             return null;
 
-        File f = dir.listFiles()[dir.listFiles().length - 1];
+        Arrays.sort(files);
+        File f = files[files.length - 1];
 
         if (f.listFiles().length < ServerType.validValues().size() * 3 * 2) {
             return f;
@@ -79,7 +84,7 @@ public class ResultWriter {
         writeHelperFile(config, step, file);
     }
 
-    private static final String fixedArgs = "{0}, {1}, {2}";
+    private static final String fixedArgs = "{0}, {1}, {2}, {3}";
 
     private void writeHelperFile(UserConfig configInit, IntervalWithStep step, File mainFile) throws IOException {
         UserConfig config = configInit.clone();
@@ -91,14 +96,16 @@ public class ResultWriter {
         String write = MessageFormat.format(fixedArgs,
                 VaryingParameter.ELEMENTS_PER_REQ,
                 VaryingParameter.CLIENTS_PARALLEL,
-                VaryingParameter.TIME_DELTA);
+                VaryingParameter.TIME_DELTA,
+                "TOTAL_REQUESTS_PER_CLIENT");
         pw.println(write);
 
         config.setVarying(step.getStart());
         write = MessageFormat.format(fixedArgs,
                 Integer.toString(config.getArraySize()),
                 Integer.toString(config.getClientsSize()),
-                Integer.toString(config.getNextReqDelta()));
+                Integer.toString(config.getNextReqDelta()),
+                Integer.toString(config.getRequestsPerClient()));
         pw.println(write);
         pw.close();
     }
