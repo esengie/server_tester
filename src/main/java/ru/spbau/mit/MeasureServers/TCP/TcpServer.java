@@ -60,19 +60,20 @@ public class TcpServer extends MeasureServer {
     }
 
     private void submit(Socket clientSocket) {
+        Runnable permWorker = () -> {
+            TcpSimpleWorker worker = new TcpSimpleWorker(this, clientSocket);
+            while (!Thread.interrupted()) {
+                worker.run();
+            }
+        };
         switch (type) {
             case TCP_PERM_THREADS:
-                Thread t = new Thread(new TcpSimpleWorker(this, clientSocket));
+                Thread t = new Thread(permWorker);
                 t.start();
                 threads.add(t);
                 break;
             case TCP_PERM_CACHED_POOL:
-                threadPool.execute(() -> {
-                    TcpSimpleWorker worker = new TcpSimpleWorker(this, clientSocket);
-                    while (!Thread.interrupted()) {
-                        worker.run();
-                    }
-                });
+                threadPool.execute(permWorker);
                 break;
             case TCP_TEMP_SINGLE_THREAD:
                 new TcpSimpleWorker(this, clientSocket).run();

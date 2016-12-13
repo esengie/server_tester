@@ -183,9 +183,9 @@ public class Controller extends Application {
     }
 
     private String showBusy() {
-        startBtn.setDisable(true);
         String prev = startBtn.getText();
         startBtn.setText("Please wait");
+        startBtn.setDisable(true);
         return prev;
     }
 

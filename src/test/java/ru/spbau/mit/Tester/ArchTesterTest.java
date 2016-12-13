@@ -23,7 +23,7 @@ public class ArchTesterTest {
     private void config(ServerType type) {
         config = UserConfig.builder()
                 .arraySize(10)
-                .clientsSize(450)
+                .clientsSize(150)
                 .nextReqDelta(50)
                 .requestsPerClient(40)
                 .serverType(type)
@@ -34,18 +34,18 @@ public class ArchTesterTest {
 
     private void runCommon() throws IOException {
         tester.testOnce();
-        config.addToVarying(-400);
+        config.addToVarying(-100);
         tester.testOnce();
     }
 
-//    @Ignore
+    @Ignore
     @Test(timeout = timeout)
     public void testTempTCP() throws Exception {
         config(ServerType.TCP_TEMP_SINGLE_THREAD);
         runCommon();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testThreadsPermTCP() throws Exception {
         config(ServerType.TCP_PERM_THREADS);
