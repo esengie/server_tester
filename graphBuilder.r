@@ -52,8 +52,9 @@ g = function(i){
     
     f(three, prettifiedEnds[i], "Time per client, s")
     title(paste("Graphs with varying", nameEnds[i], "\nwhile", 
-                names(fixed_vals)[1], "and", names(fixed_vals)[2], 
-                "set at", fixed_vals[1,1], "and", fixed_vals[1,2]), cex = 1.5)
+                names(fixed_vals)[1], "=", fixed_vals[1,1], ",", 
+                names(fixed_vals)[2], "=", fixed_vals[1,2], ", and", 
+                names(fixed_vals)[3], "=", fixed_vals[1,3]), cex = 1.5)
     f(one, prettifiedEnds[i], "Time per one sort op, mcs")
     f(two, prettifiedEnds[i], "Time per one request, mcs")
     dev.off()
