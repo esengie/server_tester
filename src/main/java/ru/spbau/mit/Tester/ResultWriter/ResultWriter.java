@@ -46,7 +46,8 @@ public class ResultWriter {
         Arrays.sort(files);
         File f = files[files.length - 1];
 
-        if (f.listFiles().length < ServerType.validValues().size() * 3 * 2) {
+        if (f.isDirectory() && f.listFiles().length <
+                ServerType.validValues().size() * 3 * 2) {
             return f;
         }
         return null;

@@ -132,6 +132,7 @@ public class Controller extends Application {
     }
 
     private String prev;
+
     private void setupUploadButton() {
         startBtn.setOnMousePressed(mouseEvent -> {
             gatherClientInput();
@@ -151,7 +152,6 @@ public class Controller extends Application {
 
     @Override
     public void stop() throws Exception {
-        stoppingUI = true;
         pool.shutdown();
         super.stop();
     }
@@ -182,12 +182,9 @@ public class Controller extends Application {
         return Integer.parseInt(field.getText());
     }
 
-    private volatile boolean stoppingUI = false;
     private void gatherServerData() throws IOException {
         List<RunResults> results = new ArrayList<>();
         for (int i = step.getStart(); i < step.getEnd(); i += step.getStep()) {
-            if (stoppingUI)
-                break;
             config.setVarying(i);
             try {
                 results.add(tester.testOnce());
