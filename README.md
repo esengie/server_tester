@@ -24,4 +24,5 @@ Note: client.jar will create a folder "results" from where it is launched, or co
 You need a vanilla R distro and a full directory results/0/ -- 42 files with same params for each architectures
 
 Rscript graphBuilder.r
+
 ---
