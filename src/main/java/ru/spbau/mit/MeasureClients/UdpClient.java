@@ -4,10 +4,8 @@ import ru.spbau.mit.Protocol.ByteProtocol;
 import ru.spbau.mit.Protocol.ProtocolConstants;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
+import java.net.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UdpClient implements MeasureClient {
@@ -34,7 +32,13 @@ public class UdpClient implements MeasureClient {
         socket.send(packet);
 
         packet = new DatagramPacket(buf, buf.length);
-        socket.receive(packet);
+        socket.setSoTimeout(10);
+        try {
+            socket.receive(packet);
+        } catch (SocketTimeoutException e){
+            // packet was dropped
+            return new ArrayList<>();
+        }
 
         return protocol.decodeArray(packet.getData());
     }

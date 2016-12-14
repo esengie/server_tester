@@ -62,7 +62,7 @@ public class TcpServer extends MeasureServer {
     private void submit(Socket clientSocket) {
         Runnable permWorker = () -> {
             TcpSimpleWorker worker = new TcpSimpleWorker(this, clientSocket);
-            while (!Thread.currentThread().isInterrupted()) {
+            while (!isStopped() && !Thread.currentThread().isInterrupted()) {
                 worker.run();
             }
         };
