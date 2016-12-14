@@ -41,57 +41,57 @@ public class MeasureClientServerTest {
     public void tcpTemp() throws IOException, InterruptedException {
         ServerType type = ServerType.TCP_TEMP_SINGLE_THREAD;
         start(type);
-        executeGet(type);
-        executeGet(type);
+        executeGet();
+        executeGet();
     }
 
     @Test(timeout = 2000)
     public void tcpPermThreads() throws IOException, InterruptedException {
         ServerType type = ServerType.TCP_PERM_THREADS;
         start(type);
-        executeGet(type);
-        executeGet(type);
+        executeGet();
+        executeGet();
     }
 
     @Test(timeout = 2000)
     public void tcpPermCached() throws IOException, InterruptedException {
         ServerType type = ServerType.TCP_PERM_CACHED_POOL;
         start(type);
-        executeGet(type);
-        executeGet(type);
+        executeGet();
+        executeGet();
     }
 
     @Test(timeout = 2000)
     public void tcpNonBlock() throws IOException, InterruptedException {
         ServerType type = ServerType.TCP_PERM_NON_BLOCK;
         start(type);
-        executeGet(type);
-        executeGet(type);
+        executeGet();
+        executeGet();
     }
 
     @Test(timeout = 2000)
     public void tcpAsync() throws IOException, InterruptedException {
         ServerType type = ServerType.TCP_PERM_ASYNC;
         start(type);
-        executeGet(type);
-        executeGet(type);
+        executeGet();
+        executeGet();
     }
 
     @Test(timeout = 2000)
     public void udpThread() throws IOException, InterruptedException {
         ServerType type = ServerType.UDP_THREAD_PER_REQUEST;
         start(type);
-        executeGet(type);
+        executeGet();
     }
 
     @Test(timeout = 2000)
     public void udpPool() throws IOException, InterruptedException {
         ServerType type = ServerType.UDP_FIXED_THREAD_POOL;
         start(type);
-        executeGet(type);
+        executeGet();
     }
 
-    private void executeGet(ServerType type) throws IOException {
+    private void executeGet() throws IOException {
         List<Integer> msg = Arrays.asList(3, 1, 45, -123);
         List<Integer> res1 = client1.executeRequest(msg);
         List<Integer> res2 = client2.executeRequest(msg);

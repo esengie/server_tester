@@ -26,8 +26,8 @@ public class TcpNonBlockServer extends MeasureServer {
     private ServerSocketChannel serverChannel;
     private Selector selector;
 
-    private Thread serverThread = new Thread(new ServerThread());
-    private ExecutorService pool = Executors.newFixedThreadPool(10);
+    private final Thread serverThread = new Thread(new ServerThread());
+    private final ExecutorService pool = Executors.newFixedThreadPool(10);
 
     private class ServerThread implements Runnable {
         @Override

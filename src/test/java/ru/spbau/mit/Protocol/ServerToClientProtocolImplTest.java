@@ -17,8 +17,8 @@ public class ServerToClientProtocolImplTest {
     private ByteArrayOutputStream outContent;
     private DataInputStream outIn;
 
-    ClientProtocol clientP = new TcpClientProtocol();
-    ServerProtocol serverP = new SyncTcpServerProtocol();
+    private final ClientProtocol clientP = new TcpClientProtocol();
+    private final ServerProtocol serverP = new SyncTcpServerProtocol();
 
     @Before
     public void setUpStreams() throws IOException {

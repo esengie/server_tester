@@ -18,8 +18,8 @@ import java.util.concurrent.Executors;
 public class UdpServer extends MeasureServer {
     private DatagramSocket serverSocket = null;
 
-    private ExecutorService threadPool = Executors.newFixedThreadPool(10);
-    private Thread serverThread = new Thread(new ServerThread());
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(10);
+    private final Thread serverThread = new Thread(new ServerThread());
     private ServerType type;
 
     public UdpServer(ServerType type) {

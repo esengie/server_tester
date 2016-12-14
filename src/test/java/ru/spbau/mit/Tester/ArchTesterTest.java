@@ -73,14 +73,14 @@ public class ArchTesterTest {
         runCommon();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testFixedPoolUDP() throws Exception {
         config(ServerType.UDP_FIXED_THREAD_POOL);
         runCommon();
     }
 
-    @Ignore
+//    @Ignore
     @Test(timeout = timeout)
     public void testThreadsUDP() throws Exception {
         config(ServerType.UDP_THREAD_PER_REQUEST);

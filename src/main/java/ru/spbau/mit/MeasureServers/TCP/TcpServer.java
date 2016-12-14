@@ -23,9 +23,9 @@ public class TcpServer extends MeasureServer {
     private static final Logger logger = Logger.getLogger(TcpServer.class.getName());
     private ServerSocket serverSocket = null;
 
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
-    private Thread serverThread = new Thread(new ServerThread());
-    private List<Thread> threads = new ArrayList<>();
+    private final ExecutorService threadPool = Executors.newCachedThreadPool();
+    private final Thread serverThread = new Thread(new ServerThread());
+    private final List<Thread> threads = new ArrayList<>();
     private ServerType type;
 
     public TcpServer(ServerType type) {

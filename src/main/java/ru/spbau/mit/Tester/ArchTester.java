@@ -74,7 +74,7 @@ public class ArchTester {
             });
         }
 
-        RunResults res = null;
+        RunResults res;
         try {
             pool.shutdown();
             while (!pool.awaitTermination(5, TimeUnit.SECONDS)) {

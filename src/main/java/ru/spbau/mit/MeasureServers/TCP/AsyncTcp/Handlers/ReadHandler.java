@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ReadHandler extends CommonChannelHandler {
-    static ExecutorService pool;
+    private static ExecutorService pool;
 
     public ReadHandler(MeasureServer server, AsynchronousSocketChannel channel) {
         super(server, channel);

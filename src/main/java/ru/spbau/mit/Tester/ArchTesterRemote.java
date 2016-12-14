@@ -26,7 +26,7 @@ public class ArchTesterRemote implements Runnable {
         tester.run();
     }
 
-    private ServerLauncherProtocol protocol = new ServerLauncherProtocolImpl();
+    private final ServerLauncherProtocol protocol = new ServerLauncherProtocolImpl();
     private MeasureServer server = null;
     private Socket client = null;
 

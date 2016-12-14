@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 abstract class CommonChannelHandler implements CompletionHandler<Integer, BufferedMessage> {
     private static final Logger logger = Logger.getLogger(TcpAsyncServer.class.getName());
     final AsynchronousSocketChannel channel;
-    protected final MeasureServer server;
+    final MeasureServer server;
 
     CommonChannelHandler(MeasureServer server, AsynchronousSocketChannel channel) {
         this.server = server;

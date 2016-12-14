@@ -16,7 +16,7 @@ public class ServerLauncherProtocolImplTest {
     private ByteArrayOutputStream clientOutContent;
     private ByteArrayOutputStream servOutContent;
 
-    private ServerLauncherProtocolImpl protocol = new ServerLauncherProtocolImpl();
+    private final ServerLauncherProtocolImpl protocol = new ServerLauncherProtocolImpl();
 
     @Before
     public void setUpStreams() throws IOException {

@@ -34,7 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * A fairly simple controller, forces ints inside textfields, shows exceptions and
+ * A fairly simple controller, forces ints inside TextFields, shows exceptions and
  * has a start button
  * <p>
  * Starts a singleThreadExecutor to handle actual server communication and test running
@@ -42,12 +42,12 @@ import java.util.logging.Logger;
 public class Controller extends Application {
     private static final Logger logger = Logger.getLogger(Controller.class.getName());
     private static String hostName = "localhost";
-    private static ExecutorService pool = Executors.newSingleThreadExecutor();
+    private static final ExecutorService pool = Executors.newSingleThreadExecutor();
 
     private ArchTester tester;
     private UserConfig config;
     private IntervalWithStep step;
-    private File dir = new File("results");
+    private final File dir = new File("results");
     private ResultWriter wr;
 
     @FXML

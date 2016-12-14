@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * A common part of nonblocking and async tcp workers
  */
-public class CommonWorker implements Runnable {
-    protected final MeasureServer server;
-    protected final BufferedMessage msg;
+class CommonWorker implements Runnable {
+    final MeasureServer server;
+    final BufferedMessage msg;
 
-    protected CommonWorker(MeasureServer server, BufferedMessage msg) {
+    CommonWorker(MeasureServer server, BufferedMessage msg) {
         this.server = server;
         this.msg = msg;
     }

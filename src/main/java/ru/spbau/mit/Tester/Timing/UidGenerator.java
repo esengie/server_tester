@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * A simple lock-free uid generator
  */
 public class UidGenerator {
-    private AtomicInteger id = new AtomicInteger(0);
+    private final AtomicInteger id = new AtomicInteger(0);
 
     public int getAndIncrement() {
         return id.getAndIncrement();

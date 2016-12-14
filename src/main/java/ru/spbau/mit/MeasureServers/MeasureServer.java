@@ -22,7 +22,6 @@ public abstract class MeasureServer {
     public final UidGenerator clientIdGen = new UidGenerator();
 
     private volatile ServiceState serverState = ServiceState.PREINIT;
-    protected ServerProtocol protocol;
 
     public void start() throws IOException {
         if (serverState != ServiceState.PREINIT)
