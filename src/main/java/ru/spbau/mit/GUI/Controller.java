@@ -6,9 +6,10 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
@@ -16,16 +17,16 @@ import ru.spbau.mit.CreationAndConfigs.IntervalWithStep;
 import ru.spbau.mit.CreationAndConfigs.ServerType;
 import ru.spbau.mit.CreationAndConfigs.UserConfig;
 import ru.spbau.mit.CreationAndConfigs.VaryingParameter;
+import ru.spbau.mit.ProtoMessage.Messages;
 import ru.spbau.mit.Tester.ArchTester;
 import ru.spbau.mit.Tester.ResultWriter.ResultWriter;
 import ru.spbau.mit.Tester.Timing.RunResults;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -83,21 +84,23 @@ public class Controller extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            VBox page = FXMLLoader.load(this.getClass().getResource("/ui.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui.fxml"));
+            VBox page = loader.load();
+            Controller controller = loader.getController();
+            controller.initWriter();
+
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Network performance");
             primaryStage.show();
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.toString());
-            showException(e);
+            ExceptionPopup.display(e);
         }
     }
 
     @FXML
     private void initialize() {
-        initWriter();
-
         architectureChoice.setItems(FXCollections
                 .observableArrayList(ServerType.validValues()));
         architectureChoice.getSelectionModel().selectFirst();
@@ -133,7 +136,7 @@ public class Controller extends Application {
             wr = new ResultWriter(dir);
         } catch (IOException e) {
             logger.log(Level.WARNING, e.toString());
-            showException(e);
+            ExceptionPopup.display(e);
         }
     }
 
@@ -147,13 +150,23 @@ public class Controller extends Application {
 
         startBtn.setOnMouseReleased(mouseEvent -> pool.submit(() -> {
             try {
-                gatherServerData();
+            List<RunResults> res = gatherServerData();
+            Platform.runLater(() -> closeBusy(prev));
+            Platform.runLater(() -> drawResults(res));
             } catch (IOException e) {
                 logger.log(Level.WARNING, "Error writing logs", e);
-                showException(e);
+                ExceptionPopup.display(e);
             }
-            Platform.runLater(() -> closeBusy(prev));
         }));
+    }
+
+    private void drawResults(List<RunResults> results) {
+        String title = MessageFormat.format("{0}, requests per client: {1}",
+                config.getServerType().toString(),
+                Integer.toString(config.getRequestsPerClient()));
+        GraphPopup popup = new GraphPopup(results, title, step,
+                config.getVaryingParameter());
+        popup.display();
     }
 
     @Override
@@ -188,7 +201,7 @@ public class Controller extends Application {
         return Integer.parseInt(field.getText());
     }
 
-    private void gatherServerData() throws IOException {
+    private List<RunResults> gatherServerData() throws IOException {
         List<RunResults> results = new ArrayList<>();
         for (int i = step.getStart(); i < step.getEnd(); i += step.getStep()) {
             config.setVarying(i);
@@ -199,6 +212,7 @@ public class Controller extends Application {
             }
         }
         wr.writeResults(config, step, results);
+        return results;
     }
 
     private String showBusy() {
@@ -212,42 +226,4 @@ public class Controller extends Application {
         startBtn.setDisable(false);
         startBtn.setText(prev);
     }
-
-    private Alert alert = null;
-
-    private void showException(Exception ex) {
-        if (alert == null) {
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Exception");
-            alert.setHeaderText("An exception has occured");
-            alert.setContentText(ex.getMessage());
-
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            ex.printStackTrace(pw);
-            String exceptionText = sw.toString();
-
-            Label label = new Label("The exception stacktrace was:");
-
-            TextArea textArea = new TextArea(exceptionText);
-            textArea.setEditable(false);
-            textArea.setWrapText(true);
-
-            textArea.setMaxWidth(Double.MAX_VALUE);
-            textArea.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setVgrow(textArea, Priority.ALWAYS);
-            GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-            GridPane expContent = new GridPane();
-            expContent.setMaxWidth(Double.MAX_VALUE);
-            expContent.add(label, 0, 0);
-            expContent.add(textArea, 0, 1);
-
-            alert.getDialogPane().setExpandableContent(expContent);
-
-            alert.setOnCloseRequest(it -> Platform.exit());
-            alert.showAndWait();
-        }
-    }
-
 }

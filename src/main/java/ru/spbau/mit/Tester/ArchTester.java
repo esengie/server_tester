@@ -78,7 +78,6 @@ public class ArchTester {
         try {
             pool.shutdown();
             while (!pool.awaitTermination(5, TimeUnit.SECONDS)) {
-                ;
             }
         } catch (InterruptedException e) {
             logger.log(Level.SEVERE, "Logic error, was interrupted", e);
