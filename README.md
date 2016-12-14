@@ -18,5 +18,10 @@ Launch the client, specifying the ip of the launcher's machine (or leave blank f
 
 Note: client.jar will create a folder "results" from where it is launched, or continue with the existing one
 
+---
 
+#### How to generate figures:
+You need a vanilla R distro and a full directory results/0/ -- 42 files with same params for each architectures
+
+Rscript graphBuilder.r
 ---
